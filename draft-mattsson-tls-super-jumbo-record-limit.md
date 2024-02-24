@@ -24,10 +24,21 @@ venue:
   latest: "https://emanjon.github.io/tls-super-jumbo-record-limit/draft-mattsson-tls-super-jumbo-record-limit.html"
 
 author:
- -
-    fullname: "John Preuß Mattsson"
-    organization: Ericsson
-    email: "john.mattsson@ericsson.com"
+- initials: J.
+  surname: Preuß Mattsson
+  name: John Preuß Mattsson
+  org: Ericsson
+  email: john.mattsson@ericsson.com
+- initials: H.
+  surname: Tschofenig
+  name: Hannes Tschofenig
+  org: Siemens
+  email: hannes.tschofenig@gmx.net
+- initials: M.
+  surname: Tüxen
+  name: Michael Tüxen
+  org: Münster Univ. of Applied Sciences
+  email: tuexen@fh-muenster.de
 
 normative:
 
