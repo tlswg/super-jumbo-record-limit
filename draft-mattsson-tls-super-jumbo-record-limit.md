@@ -19,11 +19,11 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
-category: info
+title: "Super Jumbo Record Size Limit Extension for TLS 1.3"
+abbrev: "Super Jumbo TLS Records"
+category: std
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-mattsson-tls-super-jumbo-record-limit
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
