@@ -73,9 +73,9 @@ This document defines a "large_record_size" flag extension using the TLS flags e
 
 # The "large_record_size" Flag Extension {#ex}
 
-When the "large_record_size" flag extension is negotiated, an endpoint MUST be prepared to accept protected records with ciphertexts of the negotiated length and protected record with plaintext of the negotiated length of - the allowed expansion. The maximum length of a protected record plaintext that can be negotiated is therefore 2<sup>16</sup> - 2<sup>8</sup> = 65280 octets. Unprotected messages are still subject to the lower default limits.
+When the "large_record_size" flag extension in addition to the "record_size_limit" extension is negotiated, an endpoint MUST be prepared to accept protected records with ciphertexts of the negotiated length and protected record with plaintext of the negotiated length of minus the allowed expansion. The maximum length of a protected record plaintext that can be negotiated is therefore 2<sup>16</sup> - 2<sup>8</sup> = 65280 octets. Unprotected messages are still subject to the lower default limits.
 
-The "large_record_size" flag extension MUST be negotiated together with the "record_size_limit" extension and MUST NOT be negotiated together with the "max_fragment_length" extension. A client MUST treat receipt of "large_record_size" without "record_size_limit" or together with "max_fragment_length" as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
+The "large_record_size" flag extension MUST be negotiated together with the "record_size_limit" extension and MUST NOT be negotiated together with the "max_fragment_length" extension. A client MUST treat receipt of the "large_record_size" flags extension without the "record_size_limit" extension or together with the "max_fragment_length" extension as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
 
 During resumption, the record size limit is renegotiated. Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records.  This admits the possibility that the extension might not be negotiated when a connection is resumed.
 
@@ -83,7 +83,7 @@ For DTLS 1.3 {{RFC9147}} over UDP or DCCP, the Path Maximum Transmission Unit (P
 
 # AEAD Limits
 
-The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to 2<sup>16</sup> bytes while keeping the same confidentiality and integrity advantage therefore requires lower AEAD limits. When the "large_record_size" has been negotiated, existing AEAD limits shall be decreased by a factor of 4. For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
+The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to 2<sup>16</sup> bytes while keeping the same confidentiality and integrity advantage therefore requires lower AEAD limits. When the "large_record_size" has been negotiated, existing AEAD limits SHALL be decreased by a factor of 4. For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
 
 # Security Considerations
 
