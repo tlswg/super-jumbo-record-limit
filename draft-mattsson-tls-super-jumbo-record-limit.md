@@ -75,7 +75,7 @@ This document defines a "large_record_size" flag extension using the TLS flags e
 
 When the "large_record_size" flag extension is negotiated, an endpoint MUST be prepared to accept protected records with ciphertexts of length 2<sup>16</sup> bytes and protected record with plaintext of length 2<sup>16</sup> - the allowed expansion. The maximum length of a protected record plaintext is therefore 2<sup>16</sup> - 2<sup>8</sup> = 65280 octets. Unprotected messages are still subject to the lower default limits.
 
-The "large_record_size" flag extension MUST be negotiated together with the "record_size_limit" extension and MUST NOT be negotiated together with the "max_fragment_length" extension. A endpoint MUST treat receipt of "large_record_size" without "record_size_limit" or together with "max_fragment_length" as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
+The "large_record_size" flag extension MUST be negotiated together with the "record_size_limit" extension and MUST NOT be negotiated together with the "max_fragment_length" extension. A client MUST treat receipt of "large_record_size" without "record_size_limit" or together with "max_fragment_length" as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
 
 During resumption, the record size limit is renegotiated. Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records.  This admits the possibility that the extension might not be negotiated when a connection is resumed.
 
