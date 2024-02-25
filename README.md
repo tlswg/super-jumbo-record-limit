@@ -1,6 +1,6 @@
-# Super Jumbo Record Size Limit Extension for TLS 1.3
+# Large Record Sizes for TLS and DTLS
 
-This is the working area for the individual Internet-Draft, "Super Jumbo Record Size Limit Extension for TLS 1.3".
+This is the working area for the individual Internet-Draft, "Large Record Sizes for TLS and DTLS".
 
 * [Editor's Copy](https://emanjon.github.io/tls-super-jumbo-record-limit/#go.draft-mattsson-tls-super-jumbo-record-limit.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-mattsson-tls-super-jumbo-record-limit)
