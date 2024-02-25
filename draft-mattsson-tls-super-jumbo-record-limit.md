@@ -61,12 +61,11 @@ RFC 8449 defines a record size limit extension for TLS and DTLS allowing endpoin
 
 # Introduction
 
-The records in all version of TLS records has an uint16 length field that could theoretically allow records 65535 octets in size. TLS does however have a lower protocol-defined limit for maximum plaintext record size. For TLS 1.3 {{RFC8446}}, that limit is 2<sup>14</sup> = 16385 octets. In addition, TLS 1.3 
-expand the plaintext with 1 octet for ContentType and allow AEAD expansion up to 255 octets (though typically this expansion is only 16 octets).
+The records in all versions of TLS has an uint16 length field that could theoretically allow records 65535 octets in size. TLS does however have a lower protocol-defined limit for maximum plaintext record size. For TLS 1.3 {{RFC8446}}, that limit is 2<sup>14</sup> = 16385 octets. In addition, TLS 1.3 expand the plaintext with 1 octet for ContentType and allow AEAD expansion up to 255 octets (though typically this expansion is only 16 octets).
 
 The "record_size_limit" extension {{RFC8449}} enables endpoints to negotiate a lower limit for the maximum plaintext record size, but does not allow endpoints to increase the limits enforced by TLS 1.3 {{RFC8446}}, and DTLS 1.3 {{RFC9147}}. In some use cases such as DTLS over SCTP {{RFC6083}} the 2<sup>14</sup> bytes limit is a severe limitation.
 
-This document defines a "large_record_size" flag using the TLS flags extension mechanism ({{ex}}). The record size limit extension for TLS as specified in {{RFC8449}} used in combination with the flag defined in this document allows endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum size of protected records to 2<sup>16</sup>-1 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This extension is defined for version 1.3 of TLS and DTLS.
+This document defines a "large_record_size" flag extension using the TLS flags extension mechanism ({{ex}}). The record size limit extension for TLS as specified in {{RFC8449}} used in combination with the flag defined in this document allows endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum size of protected records to 2<sup>16</sup>-1 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This extension is defined for version 1.3 of TLS and DTLS.
 
 # Terminology
 
