@@ -58,7 +58,7 @@ informative:
 
 --- abstract
 
-RFC 8449 defines a Record Size Limit Extension for TLS allowing endpoints to negotiate a record size limit smaller than the protocol-defined maximum record size, which is around 2<sup>14</sup> bytes. This document specifies a TLS flags extension to be used in combination with the Record Size Limit Extension allowing endpoints to use a record size limit larger than the protocol-defined maximum record size, but not more than about 2<sup>16</sup> bytes.
+RFC 8449 defines a record size limit Extension for TLS and DTLS allowing endpoints to negotiate a record size limit smaller than the protocol-defined maximum record size, which is around 2<sup>14</sup> bytes. This document specifies a TLS flags extension to be used in combination with the record size limit extension allowing endpoints to use a record size limit larger than the protocol-defined maximum record size, but not more than about 2<sup>16</sup> bytes.
 
 --- middle
 
