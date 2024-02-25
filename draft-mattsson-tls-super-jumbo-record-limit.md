@@ -1,6 +1,5 @@
 ---
-title: "Super Jumbo Record Size Limit Extension for TLS 1.3"
-abbrev: "Super Jumbo TLS Records"
+title: "Large Record Sizes for TLS and DTLS"
 category: std
 
 docname: draft-mattsson-tls-super-jumbo-record-limit-latest
