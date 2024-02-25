@@ -45,15 +45,13 @@ normative:
   RFC8174:
   RFC8446:
   RFC8449:
+  RFC9147:
   I-D.ietf-tls-tlsflags:
 
 informative:
 
-  RFC5246:
   RFC6083:
-  RFC6347:
   RFC8201:
-  RFC9147:
 
 --- abstract
 
@@ -63,13 +61,12 @@ RFC 8449 defines a record size limit extension for TLS and DTLS allowing endpoin
 
 # Introduction
 
-The records in all version of TLS records has an uint16 length field that could theoretically allow records 65535 octets in size. TLS does however have a lower protocol-defined limit for maximum plaintext record size. For TLS 1.2 {{RFC5246}}, that limit is 2<sup>14</sup> = 16384 octets. TLS 1.3 {{RFC8446}} uses a limit of 2<sup>14</sup> + 1 = 16385 octets. In addition, TLS 1.2 allow expansion from compression and protection up to 2048 octets (though typically this expansion is only 16 octets). TLS 1.3 reduces the allowance for expansion to 256 octets.
+The records in all version of TLS records has an uint16 length field that could theoretically allow records 65535 octets in size. TLS does however have a lower protocol-defined limit for maximum plaintext record size. For TLS 1.3 {{RFC8446}}, that limit is 2<sup>14</sup> = 16385 octets. In addition, TLS 1.3 
+expand the plaintext with 1 octet for ContentType and allow AEAD expansion up to 255 octets (though typically this expansion is only 16 octets).
 
-The "record_size_limit" extension {{RFC8449}} enables endpoints to negotiate a lower limit for the maximum plaintext record size, but does not allow endpoints to increase the limits enforced by TLS 1.3 {{RFC8446}}, TLS 1.2 {{RFC5246}}, DTLS 1.3 {{RFC9147}}, and DTLS 1.2 {{RFC6347}}.
+The "record_size_limit" extension {{RFC8449}} enables endpoints to negotiate a lower limit for the maximum plaintext record size, but does not allow endpoints to increase the limits enforced by TLS 1.3 {{RFC8446}}, and DTLS 1.3 {{RFC9147}}. In some use cases such as DTLS over SCTP {{RFC6083}} the 2<sup>14</sup> bytes limit is a severe limitation.
 
-In some use cases such as DTLS over SCTP {{RFC6083}} the 2<sup>14</sup> bytes limit is a severe limitation.
-
-This document defines a "large_record_size" flags extension ({{ex}}). The Record Size Limit Extension for TLS as specified in {{RFC8449}} used in combination with the flags extension defined in this document allows endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum size of protected records to 2<sup>16</sup>-1 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This extension is defined for version 1.3 of TLS and DTLS.
+This document defines a "large_record_size" flag using the TLS flags extension mechanism ({{ex}}). The record size limit extension for TLS as specified in {{RFC8449}} used in combination with the flag defined in this document allows endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum size of protected records to 2<sup>16</sup>-1 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This extension is defined for version 1.3 of TLS and DTLS.
 
 # Terminology
 
@@ -77,14 +74,11 @@ This document defines a "large_record_size" flags extension ({{ex}}). The Record
 
 # The "super_jumbo_record_size_limit" Flags Extension {#ex}
 
-The "super_jumbo_record_size_limit" extension does not have any ExtensionData. When the "super_jumbo_record_size_limit" extension is negotiated, an endpoint MUST be prepared to accept protected records with ciphertexts of length 2<sup>16</sup> bytes and protected record with plaintext of length 2<sup>16</sup> - the allowed expansion. The maximum length of a protected record plaintext is therefore 2<sup>16</sup> - 2<sup>11</sup> = 63488 octets in TLS 1.2 and 2<sup>16</sup> - 2<sup>8</sup> = 65280 octets in TLS 1.3. Unprotected messages are still subject to the lower default limits in TLS/DTLS 1.3.
+When the "large_record_size" flag is negotiated, an endpoint MUST be prepared to accept protected records with ciphertexts of length 2<sup>16</sup> bytes and protected record with plaintext of length 2<sup>16</sup> - the allowed expansion. The maximum length of a protected record plaintext is therefore 2<sup>16</sup> - 2<sup>8</sup> = 65280 octets. Unprotected messages are still subject to the lower default limits.
 
-The "super_jumbo_record_size_limit" extension MUST NOT be negotiated together with the "record_size_limit" extension or the "max_fragment_length" extension. A client MUST treat receipt
-of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fragment_length" as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
+The "large_record_size" flag MUST be negotiated together with the "record_size_limit" extension and MUST NOT be negotiated together with the "max_fragment_length" extension. A endpoint MUST treat receipt of "large_record_size" without "record_size_limit" or together with "max_fragment_length" as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
 
-In TLS 1.3, the server sends the "super_jumbo_record_size_limit" extension in the EncryptedExtensions message.
-
-During renegotiation or resumption, the record size limit is renegotiated.  Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records.  This admits the possibility that the extension might not be negotiated when a connection is renegotiated or resumed.
+During resumption, the record size limit is renegotiated. Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records.  This admits the possibility that the extension might not be negotiated when a connection is resumed.
 
 For DTLS 1.3 {{RFC9147}} over UDP or DCCP, the Path Maximum Transmission Unit (PMTU) also limits the size of records.  The record size limit does not affect PMTU discovery and SHOULD be set independently. The record size limit is fixed during the handshake and so should be set based on constraints at the endpoint and not based on the current network environment. In comparison, the PMTU is determined by the network path and can change dynamically over time. See PMTU {{RFC8201}} and Section 4.1 of DTLS 1.3 {{RFC9147}} for more detail on PMTU discovery. For DTLS over TCP or SCTP, which automatically fragments and reassembles datagrams, there is no PMTU limitation.
 
