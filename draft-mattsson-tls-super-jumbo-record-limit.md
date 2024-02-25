@@ -44,7 +44,6 @@ normative:
   RFC2119:
   RFC8174:
   RFC8446:
-  RFC8447:
   RFC8449:
   I-D.ietf-tls-tlsflags:
 
@@ -100,6 +99,7 @@ Large record sizes might require more memory allocation for senders and receiver
 # IANA Considerations
 
 This document registers the following entry to the "TLS Flags" registry defined in {{I-D.ietf-tls-tlsflags}}:
+
    *  Value: TBD1
    *  Flag Name: large_record_size
    *  Messages: CH, EE
