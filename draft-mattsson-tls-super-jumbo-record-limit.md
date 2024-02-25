@@ -83,7 +83,7 @@ For DTLS 1.3 {{RFC9147}} over UDP or DCCP, the Path Maximum Transmission Unit (P
 
 # AEAD Limits
 
-The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to 2<sup>16</sup> bytes while keeping the same confidentiality and integrity advantage therefore requires lower AEAD limits. When the "super_jumbo_record_size_limit" has been negotiated, existing AEAD limits shall be decreased by a factor of 4. For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
+The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to 2<sup>16</sup> bytes while keeping the same confidentiality and integrity advantage therefore requires lower AEAD limits. When the "large_record_size" has been negotiated, existing AEAD limits shall be decreased by a factor of 4. For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
 
 # Security Considerations
 
