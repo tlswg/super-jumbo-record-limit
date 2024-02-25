@@ -59,25 +59,25 @@ informative:
 
 --- abstract
 
-An extension "super_jumbo_record_size_limit" to (Datagram) Transport Layer Security (TLS) is defined that allows endpoints to negotiate a 2<sup>16</sup> bytes maximum size of protected records. This is larger than the default limit of around 2<sup>14</sup> bytes.
+RFC 8449 defines a Record Size Limit Extension for TLS allowing endpoints to negotiate a record size limit smaller than the protocol-defined maximum record size, which is around 2<sup>14</sup> bytes. This document specifies a TLS flags extension to be used in combination with the Record Size Limit Extension allowing endpoints to use a record size limit larger than the protocol-defined maximum record size, but not more than about 2<sup>16</sup> bytes.
 
 --- middle
 
 # Introduction
 
-The records in all version of TLS records has an uint16 length field that could theoretically allow records 65536 octets in size. TLS does however have a lower protocol-defined limit for maximum plaintext record size. For TLS 1.2 {{RFC5246}}, that limit is 2<sup>14</sup> = 16384 octets. TLS 1.3 {{RFC8446}} uses a limit of 2<sup>14</sup> + 1 = 16385 octets. In addition, TLS 1.2 allow expansion from compression and protection up to 2048 octets (though typically this expansion is only 16 octets). TLS 1.3 reduces the allowance for expansion to 256 octets.
+The records in all version of TLS records has an uint16 length field that could theoretically allow records 65535 octets in size. TLS does however have a lower protocol-defined limit for maximum plaintext record size. For TLS 1.2 {{RFC5246}}, that limit is 2<sup>14</sup> = 16384 octets. TLS 1.3 {{RFC8446}} uses a limit of 2<sup>14</sup> + 1 = 16385 octets. In addition, TLS 1.2 allow expansion from compression and protection up to 2048 octets (though typically this expansion is only 16 octets). TLS 1.3 reduces the allowance for expansion to 256 octets.
 
 The "record_size_limit" extension {{RFC8449}} enables endpoints to negotiate a lower limit for the maximum plaintext record size, but does not allow endpoints to increase the limits enforced by TLS 1.3 {{RFC8446}}, TLS 1.2 {{RFC5246}}, DTLS 1.3 {{RFC9147}}, and DTLS 1.2 {{RFC6347}}.
 
 In some use cases such as DTLS over SCTP {{RFC6083}} the 2<sup>14</sup> bytes limit is a severe limitation.
 
-This document defines a "super_jumbo_record_size_limit" extension ({{ex}}). The extension allows endpoints to negotiate a 2<sup>16</sup> bytes maximum size of protected records, which is larger than the default limit of 2<sup>14</sup> bytes. This extension is defined for version 1.3 of TLS and DTLS.
+This document defines a "super_jumbo_record_size_limit" flags extension ({{ex}}). The Record Size Limit Extension for TLS as specified in {{RFC8449}} used in combination with the flags extension defined in this document allows endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum size of protected records to 2<sup>16</sup>-1 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This extension is defined for version 1.3 of TLS and DTLS.
 
 # Terminology
 
 {::boilerplate bcp14-tagged}
 
-# The "super_jumbo_record_size_limit" Extension {#ex}
+# The "super_jumbo_record_size_limit" Flags Extension {#ex}
 
 The "super_jumbo_record_size_limit" extension does not have any ExtensionData. When the "super_jumbo_record_size_limit" extension is negotiated, an endpoint MUST be prepared to accept protected records with ciphertexts of length 2<sup>16</sup> bytes and protected record with plaintext of length 2<sup>16</sup> - the allowed expansion. The maximum length of a protected record plaintext is therefore 2<sup>16</sup> - 2<sup>11</sup> = 63488 octets in TLS 1.2 and 2<sup>16</sup> - 2<sup>8</sup> = 65280 octets in TLS 1.3. Unprotected messages are still subject to the lower default limits in TLS/DTLS 1.3.
 
