@@ -99,7 +99,12 @@ Large record sizes might require more memory allocation for senders and receiver
 
 # IANA Considerations
 
-This document registers the "super_jumbo_record_size_limit" extension in the "TLS ExtensionType Values" registry established in {{RFC5246}}. The "super_jumbo_record_size_limit" extension has been assigned a code point of TBD. The IANA registry {{RFC8447}} \[\[will list\|lists\]\] this extension as "Recommended" (i.e., "Y") and indicates that it may appear in the ClientHello (CH) or EncryptedExtensions (EE) messages in TLS 1.3 {{RFC8446}}.
+This document registers the following entry to the "TLS Flags" registry defined in {{I-D.ietf-tls-tlsflags}}:
+   *  Value: TBD1
+   *  Flag Name: large_record_size
+   *  Messages: CH, EE
+   *  Recommended: Y
+   *  Reference: [This document]
 
 --- back
 
