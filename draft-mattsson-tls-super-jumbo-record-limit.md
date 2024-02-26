@@ -79,8 +79,6 @@ The "large_record_size" flag extension MUST be negotiated together with the "rec
 
 During resumption, the record size limit is renegotiated. Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records.  This admits the possibility that the extension might not be negotiated when a connection is resumed.
 
-For DTLS 1.3 {{RFC9147}} over UDP or DCCP, the Path Maximum Transmission Unit (PMTU) also limits the size of records.  The record size limit does not affect PMTU discovery and SHOULD be set independently. The record size limit is fixed during the handshake and so should be set based on constraints at the endpoint and not based on the current network environment. In comparison, the PMTU is determined by the network path and can change dynamically over time. See PMTU {{RFC8201}} and Section 4.1 of DTLS 1.3 {{RFC9147}} for more detail on PMTU discovery. For DTLS over TCP or SCTP, which automatically fragments and reassembles datagrams, there is no PMTU limitation.
-
 # AEAD Limits
 
 The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to 2<sup>16</sup> bytes while keeping the same confidentiality and integrity advantage therefore requires lower AEAD limits. When the "large_record_size" has been negotiated, existing AEAD limits SHALL be decreased by a factor of 4. For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
