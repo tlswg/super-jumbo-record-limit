@@ -101,4 +101,4 @@ This document registers the following entry to the "TLS Flags" registry defined 
 # Acknowledgments
 {:numbered="false"}
 
-Add your name here.
+The authors would like to thank {{{Benjamin Kaduk}}} for his valuable comments and feedback.
