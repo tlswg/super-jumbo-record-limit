@@ -64,7 +64,7 @@ The records in all versions of TLS have an uint16 length field that could theore
 
 The "record_size_limit" extension {{RFC8449}} enables endpoints to negotiate a lower limit for the maximum plaintext record size, but does not allow endpoints to increase the limits enforced by TLS 1.3 {{RFC8446}}, and DTLS 1.3 {{RFC9147}}. In some use cases such as DTLS over SCTP {{RFC6083}} the 2<sup>14</sup> bytes limit is a severe limitation.
 
-This document defines a "large_record_size" flag extension using the TLS flags extension mechanism {{I-D.ietf-tls-tlsflags}}. The record size limit extension for TLS as specified in {{RFC8449}} used in combination with the flag extension defined in this document allow endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum size of protected records to 2<sup>16</sup> - 1 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This flag extension is defined for version 1.3 of TLS and DTLS.
+This document defines a "large_record_size" flag extension using the TLS flags extension mechanism {{I-D.ietf-tls-tlsflags}}. The record size limit extension for TLS as specified in {{RFC8449}} used in combination with the flag extension defined in this document allow endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum plaintext record size for protected records to 2<sup>16</sup> - 257 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This flag extension is defined for version 1.3 of TLS and DTLS.
 
 # Terminology
 
@@ -72,7 +72,7 @@ This document defines a "large_record_size" flag extension using the TLS flags e
 
 # The "large_record_size" Flag Extension {#ex}
 
-When the "large_record_size" flag extension in addition to the "record_size_limit" extension is negotiated, an endpoint MUST be prepared to accept protected records with ciphertexts of the negotiated length and protected record with plaintext of the negotiated length of minus the allowed expansion. The maximum length of a protected record plaintext that can be negotiated is therefore 2<sup>16</sup> - 257 = 65279 octets. Unprotected messages are still subject to the lower default limits.
+When the "large_record_size" flag extension in addition to the "record_size_limit" extension is negotiated, an endpoint MUST be prepared to accept protected records with plaintext of the negotiated length. Since the 2<sup>16</sup> - 1 limit also applies to the ciphertext length, the maximum length of a protected record plaintext that can be negotiated is therefore 2<sup>16</sup> - 257 = 65279 octets. Unprotected messages are still subject to the lower default limits.
 
 The "large_record_size" flag extension MUST be negotiated together with the "record_size_limit" extension and MUST NOT be negotiated together with the "max_fragment_length" extension. A client MUST treat receipt of the "large_record_size" flags extension without the "record_size_limit" extension or together with the "max_fragment_length" extension as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
 
