@@ -63,8 +63,7 @@ TLS 1.3 records limit the inner plaintext size to 2<sup>14</sup> + 1 bytes and h
 
 TLS 1.3 protected records limit the inner plaintext size to 2<sup>14</sup> + 1 bytes and have 3 bytes overhead for compatibility with middleboxes expecting TLS 1.2 records. TLS-based protocols are increasingly used to secure long-lived interfaces in critical infrastructure, such as telecommunication networks. In some infrastructure use cases, the 2<sup>14</sup>-byte limit in TLS leads to more fragmentation, resulting in increased CPU and memory consumption, and might necessitate an additional protocol layer for fragmentation. Allowing 2<sup>32</sup>-byte records would eliminate additional fragmentation in almost all use cases. In {{RFC6083}} (DTLS over SCTP), the 2<sup>14</sup>-byte limit is a severe restriction.
 
-This document defines a "large_record_size_limit" extension that allows endpoints to negotiate a larger maximum inner plaintext size. This extension is valid in TLS 1.3 and DTLS 1.3. The extension works similarly to the "record_size_limit" extension defined in {{RFC8449}}. Additionally, this document defines new TLS 1.3 TLSLargeCiphertext and DTLS 1.3 unified_hdr structures to enable inner plaintexts up to 2<sup>32</sup> - 256 bytes with reduced overhead. For example, inner plaintexts up to 2<sup>16</sup> - 256 
-bytes can be supported with 3 bytes less overhead, which is useful in constrained IoT. The "large_record_size_limit" extension is incompatible with middleboxes expecting TLS 1.2 records.
+This document defines a "large_record_size_limit" extension that allows endpoints to negotiate a larger maximum inner plaintext size. This extension is valid in TLS 1.3 and DTLS 1.3. The extension works similarly to the "record_size_limit" extension defined in {{RFC8449}}. Additionally, this document defines new TLS 1.3 TLSLargeCiphertext and DTLS 1.3 unified_hdr structures to enable inner plaintexts up to 2<sup>32</sup> - 256 bytes with reduced overhead. For example, inner plaintexts up to 2<sup>16</sup> - 256 bytes can be supported with 3 bytes less overhead, which is useful in constrained IoT. The "large_record_size_limit" extension is incompatible with middleboxes expecting TLS 1.2 records.
 
 # Terminology
 
@@ -90,8 +89,7 @@ Unprotected messages and records protected with early_traffic_secret or handshak
 
 When the "large_record_size_limit" extension is negotiated:
 
-* All TLS 1.3 records protected with application_traffic_secret MUST use the TLSLargeCiphertext structure instead of the TLSCiphertext structure. The size of the length field depends on the limit advertised by the receiver. If the limit is less than 
-2<sup>16</sup> - 255 an uint16 is used, if the limit is larger than 2<sup>24</sup> - 256 an uint32 is used, and otherwise an uint24 is used. The length is fixed for the connection. Different lengths might be used in different directions.
+* All TLS 1.3 records protected with application_traffic_secret MUST use the TLSLargeCiphertext structure instead of the TLSCiphertext structure. The size of the length field depends on the limit advertised by the receiver. If the limit is less than 2<sup>16</sup> - 255 an uint16 is used, if the limit is larger than 2<sup>24</sup> - 256 an uint32 is used, and otherwise an uint24 is used. The length is fixed for the connection. Different lengths might be used in different directions.
 
 ~~~~~~~~
    enum { u16(0), u24(1), u32(2) } Length;
@@ -135,16 +133,13 @@ When the "large_record_size_limit" extension is negotiated:
 
 * An endpoint MAY generate records protected with application_traffic_secret with inner plaintext that is equal to or smaller than the LargeRecordSizeLimit value it receives from its peer. An endpoint MUST NOT generate a protected record with inner plaintext that is larger than the LargeRecordSizeLimit value it receives from its peer.
 
-The "large_record_size_limit" extension is not compatible with middleboxes expecting TLS 1.2 records and SHOULD NOT be negotiated where such middleboxes are expected. 
-A server MUST NOT send extension responses to more than one of "large_record_size_limit", "record_size_limit", and "max_fragment_length".
-A client MUST treat receipt of more than one of "large_record_size_limit", "record_size_limit", and "max_fragment_length" as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
+The "large_record_size_limit" extension is not compatible with middleboxes expecting TLS 1.2 records and SHOULD NOT be negotiated where such middleboxes are expected. A server MUST NOT send extension responses to more than one of "large_record_size_limit", "record_size_limit", and "max_fragment_length". A client MUST treat receipt of more than one of "large_record_size_limit", "record_size_limit", and "max_fragment_length" as a fatal error, and it SHOULD generate an "illegal_parameter" alert.
 
 The Path Maximum Transmission Unit (PMTU) in DTLS also limits the size of records. The record size limit does not affect PMTU discovery and SHOULD be set independently. The record size limit is fixed during the handshake and so should be set based on constraints at the endpoint and not based on the current network environment. In comparison, the PMTU is determined by the network path and can change dynamically over time.
 
 # Limits on Key Usage
 
-The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to more than 2<sup>14</sup> + 256 bytes while keeping the same confidentiality and integrity advantage per write key therefore requires lower AEAD limits. When the "large_record_size" has been negotiated record size limit larger than 2<sup>14</sup> + 1
-bytes, existing AEAD limits SHALL be decreased by a factor of (LargeRecordSizeLimit) / (2^14-256). For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only arounf 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
+The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to more than 2<sup>14</sup> + 256 bytes while keeping the same confidentiality and integrity advantage per write key therefore requires lower AEAD limits. When the "large_record_size" has been negotiated record size limit larger than 2<sup>14</sup> + 1 bytes, existing AEAD limits SHALL be decreased by a factor of (LargeRecordSizeLimit) / (2^14-256). For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only arounf 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
 
 # Security Considerations
 
@@ -159,7 +154,7 @@ IANA is requested to assign a new value in the TLS ExtensionType Values registry
    *  The Extension Name should be large_record_size_limit
 
    *  The TLS 1.3 value should be CH, EE
-   
+
    *  The DTLS-Only value should be N
 
    *  The Recommended value should be Y
