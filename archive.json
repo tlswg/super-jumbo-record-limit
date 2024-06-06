@@ -1,0 +1,228 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-06-06T00:42:07.826085+00:00",
+  "repo": "emanjon/tls-super-jumbo-record-limit",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOLXcmPc6AT5lY",
+      "title": "Is super-jumbo appropriate?",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/issues/1",
+      "state": "CLOSED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm wondering if using super-jumbo as an indication to increase the upper limit is too striking, since either super or jumbo would provide the information.\r\nWhat about using \"Large Record Sizes for (D)TLS\"? Since the document will specify a flags extension to be used in combination with the record size limit extension to negotiate a record size limit larger than the currently protocol-defined record size limit, I don't think describing the contents as \"an extension\" or as an \"flags extension\" covers it. Maybe we should also not limit this in the title to 1.3, since it might also work in future versions of the protocol.\r\n\r\n",
+      "createdAt": "2024-02-25T10:33:34Z",
+      "updatedAt": "2024-02-25T17:46:36Z",
+      "closedAt": "2024-02-25T17:46:35Z",
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "OWNER",
+          "body": ">What about using \"Large Record Sizes for (D)TLS\"\r\n>Maybe we should also not limit this in the title to 1.3\r\nSounds good to me. That is definitely a more appropriate name. TLS WG used to put 1.3 in titles, but I note the last RFC has title \"Delegated Credentials for TLS and DTLS\"",
+          "createdAt": "2024-02-25T10:59:09Z",
+          "updatedAt": "2024-02-25T10:59:09Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "OWNER",
+          "body": "The orignal draft was written for 1.2 and 1.3. With the flag extension this would be 1.3 only. I will remove all mention of 1.2",
+          "createdAt": "2024-02-25T16:55:44Z",
+          "updatedAt": "2024-02-25T16:55:44Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "OWNER",
+          "body": "Done in main",
+          "createdAt": "2024-02-25T17:46:35Z",
+          "updatedAt": "2024-02-25T17:46:35Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOLXcmPc6AU1QR",
+      "title": "Removal of PMTU related text?",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/issues/3",
+      "state": "CLOSED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm wondering if the last paragraph in Section 3 is needed in this document. It is pretty much the same as in RFC 8449. This document only specifies a flag allowing to use the extension defined in RFC 8449 in a more general way. So everything saig]d in RFC 8449 applies. So I suggesting to remove the paragraph... Any opinion?",
+      "createdAt": "2024-02-25T21:16:15Z",
+      "updatedAt": "2024-02-26T07:27:28Z",
+      "closedAt": "2024-02-26T07:27:28Z",
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "OWNER",
+          "body": "Sound good to me. It made sense when the extension was used independently of RFC 8449. Can/Should be removed now.",
+          "createdAt": "2024-02-25T23:10:08Z",
+          "updatedAt": "2024-02-25T23:10:08Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOLXcmPc6AU2Ko",
+      "title": "Recommended: Y?",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/issues/4",
+      "state": "CLOSED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm not sure if\r\n```\r\nRecommended: Y\r\n```\r\nis the correct choice. I also haven found the text in an RFC describing that line. However, I think that the flags extension we define is only needed in some scenarios. So is the above the appropriate choice?",
+      "createdAt": "2024-02-25T21:26:54Z",
+      "updatedAt": "2024-02-26T08:19:09Z",
+      "closedAt": "2024-02-26T08:19:09Z",
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "OWNER",
+          "body": "The soon to be adopted definition of the \"Recommended\" Column is in \r\nhttps://datatracker.ietf.org/doc/draft-ietf-tls-rfc8447bis/\r\n\r\nY just means it is RECOMMENDED for the specified purpose, which might be limited.\r\n\r\n```\r\n3.  Adding \"Recommended\" Column\r\n\r\n   The instructions in this document update the Recommended column,\r\n   originally added in [RFC8447] to add a third value, \"D\", indicating\r\n   that a value is \"Discouraged\".  The permitted values are:\r\n\r\n   Y:  Indicates that the IETF has consensus that the item is\r\n      RECOMMENDED.  This only means that the associated mechanism is fit\r\n      for the purpose for which it was defined.  Careful reading of the\r\n      documentation for the mechanism is necessary to understand the\r\n      applicability of that mechanism.  The IETF could recommend\r\n      mechanisms that have limited applicability, but will provide\r\n      applicability statements that describe any limitations of the\r\n      mechanism or necessary constraints on its use.\r\n\r\n   N:  Indicates that the item has not been evaluated by the IETF and\r\n      that the IETF has made no statement about the suitability of the\r\n      associated mechanism.  This does not necessarily mean that the\r\n      mechanism is flawed, only that no consensus exists.  The IETF\r\n      might have consensus to leave an items marked as \"N\" on the basis\r\n      of it having limited applicability or usage constraints.\r\n\r\n   D:  Indicates that the item is discouraged.  This marking could be\r\n      used to identify mechanisms that might result in problems if they\r\n      are used, such as a weak cryptographic algorithm or a mechanism\r\n      that might cause interoperability problems in deployment.\r\n      Implementers SHOULD consult the linked references associated with\r\n      the item to determine the conditions under which it SHOULD NOT or\r\n      MUST NOT be used.\r\n\r\n   Setting a value to \"Y\" or \"D\" in the \"Recommended\" column requires\r\n   IETF Standards Action [RFC8126].  Any state transition to or from a\r\n   \"Y\" or \"D\" value requires IESG Approval.  Not all items defined in\r\n   Standards Track RFCs need to be set to \"Y\" or \"D\".  Any item not\r\n   otherwise specified is set to \"N\".  The column is blank for values\r\n   that are unassigned or reserved unless specifically set.\r\n```",
+          "createdAt": "2024-02-25T23:08:32Z",
+          "updatedAt": "2024-02-25T23:08:32Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "OWNER",
+          "body": "So my interpretation is that Y is OK/Correct.",
+          "createdAt": "2024-02-26T08:14:52Z",
+          "updatedAt": "2024-02-26T08:14:52Z"
+        },
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree. Thank you very much for providing a pointer to the description of the column.",
+          "createdAt": "2024-02-26T08:19:09Z",
+          "updatedAt": "2024-02-26T08:19:09Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOLXcmPc6BBPny",
+      "title": "RFC 8449 negotiates plaintext length, not ciphertext",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/issues/5",
+      "state": "CLOSED",
+      "author": "emanjon",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Ben Kaduk wrote:\r\n\r\nI also note that the semantics of record_size_limit per RFC 8449 are to\r\napply to the plaintext length, so I think it actually is weird and\r\noverly complicated for your draft to propose that the negotiated length\r\nwill now be of the ciphertext length.",
+      "createdAt": "2024-03-02T04:59:22Z",
+      "updatedAt": "2024-03-04T19:56:42Z",
+      "closedAt": "2024-03-04T19:56:42Z",
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 2,
+      "id": "PR_kwDOLXcmPc5n1sEs",
+      "title": "Update abstract and intro",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/pull/2",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-25T11:13:22Z",
+      "updatedAt": "2024-02-25T18:09:41Z",
+      "baseRepository": "emanjon/tls-super-jumbo-record-limit",
+      "baseRefName": "main",
+      "baseRefOid": "4891d77c8f42dabf1222c27c50fc7bcd31b30cb8",
+      "headRepository": "emanjon/tls-super-jumbo-record-limit",
+      "headRefName": "initial-changes",
+      "headRefOid": "074de937ee09563b749e7e5b8887cc66add1d470",
+      "closedAt": "2024-02-25T15:51:59Z",
+      "mergedAt": "2024-02-25T15:51:59Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "cf12fed1976172652583c0648a16c8fe22b5a8ed"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOLXcmPc5okVCI",
+      "title": "Limit the maximum plaintext record size to 2^16-257",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/pull/6",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This results in a maximum ciphertext record size of 2^16-257+255+1, which is 2^16-1. This is the largest value, which can be encoded in a 16 bit length field.",
+      "createdAt": "2024-03-04T09:54:45Z",
+      "updatedAt": "2024-03-04T19:56:41Z",
+      "baseRepository": "emanjon/tls-super-jumbo-record-limit",
+      "baseRefName": "main",
+      "baseRefOid": "af5a0fa0392de9a1308a0b5f86ef6097c8842cf1",
+      "headRepository": "emanjon/tls-super-jumbo-record-limit",
+      "headRefName": "use-plaintext-length",
+      "headRefOid": "a17e4b5ea8bb435f95f627b53f9cc9b43db2e771",
+      "closedAt": "2024-03-04T19:56:41Z",
+      "mergedAt": "2024-03-04T19:56:41Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "20eb88d6f8d3e770a806ae462e7279b93c4e70a0"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
