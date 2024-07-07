@@ -4,32 +4,31 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Super Jumbo Record Size Limit Extension for TLS 1.3</title>
+<title>Large Record Sizes for TLS and DTLS with Reduced Overhead</title>
 <meta content="John Preuß Mattsson" name="author">
 <meta content="Hannes Tschofenig" name="author">
 <meta content="Michael Tüxen" name="author">
 <meta content="
-       RFC 8449 defines a Record Size Limit Extension for TLS allowing endpoints to negotiate a record size limit smaller than the protocol-defined maximum record size, which is around 2 14  bytes. This document specifies a TLS flags extension to be used in combination with the Record Size Limit Extension allowing endpoints to use a record size limit larger than the protocol-defined maximum record size, but not more than about 2 16  bytes. 
+       TLS 1.3 records limit the inner plaintext size to 2 14  + 1 bytes and have 3 bytes overhead for compatibility with middleboxes. This document defines a TLS extension that enables endpoints to negotiate a larger maximum inner plaintext size, up to 2 32  - 256 bytes, with reduced overhead. 
     " name="description">
-<meta content="xml2rfc 3.19.4" name="generator">
+<meta content="xml2rfc 3.22.0" name="generator">
 <meta content="next generation" name="keyword">
 <meta content="unicorn" name="keyword">
 <meta content="sparkling distributed ledger" name="keyword">
 <meta content="draft-mattsson-tls-super-jumbo-record-limit-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.19.4
-    Python 3.11.6
+  xml2rfc 3.22.0
+    Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
-    Jinja2 3.1.2
-    lxml 4.9.3
-    platformdirs 4.2.0
+    Jinja2 3.1.4
+    lxml 4.9.4
+    platformdirs 4.2.2
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.31.0
-    setuptools 68.2.2
-    six 1.16.0
+    requests 2.32.3
+    setuptools 69.5.1
     wcwidth 0.2.13
 -->
 <link href="draft-mattsson-tls-super-jumbo-record-limit.xml" rel="alternate" type="application/rfc+xml">
@@ -1028,12 +1027,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">Super Jumbo TLS Records</td>
-<td class="right">February 2024</td>
+<td class="center">Large Record Sizes for TLS</td>
+<td class="right">July 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Preuß Mattsson, et al.</td>
-<td class="center">Expires 28 August 2024</td>
+<td class="center">Expires 8 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1046,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-mattsson-tls-super-jumbo-record-limit-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-25" class="published">25 February 2024</time>
+<time datetime="2024-07-07" class="published">7 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-28">28 August 2024</time></dd>
+<dd class="expires"><time datetime="2025-01-08">8 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1069,10 +1068,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">Super Jumbo Record Size Limit Extension for TLS 1.3</h1>
+<h1 id="title">Large Record Sizes for TLS and DTLS with Reduced Overhead</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">RFC 8449 defines a Record Size Limit Extension for TLS allowing endpoints to negotiate a record size limit smaller than the protocol-defined maximum record size, which is around 2<sup>14</sup> bytes. This document specifies a TLS flags extension to be used in combination with the Record Size Limit Extension allowing endpoints to use a record size limit larger than the protocol-defined maximum record size, but not more than about 2<sup>16</sup> bytes.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">TLS 1.3 records limit the inner plaintext size to 2<sup>14</sup> + 1 bytes and have 3 bytes overhead for compatibility with middleboxes. This document defines a TLS extension that enables endpoints to negotiate a larger maximum inner plaintext size, up to 2<sup>32</sup> - 256 bytes, with reduced overhead.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1109,7 +1108,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1145,10 +1144,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-the-super_jumbo_record_size" class="internal xref">The "super_jumbo_record_size_limit" Flags Extension</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-the-large_record_size_limit" class="internal xref">The "large_record_size_limit" Extension</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-aead-limits" class="internal xref">AEAD Limits</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-limits-on-key-usage" class="internal xref">Limits on Key Usage</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
@@ -1182,10 +1181,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The records in all version of TLS records has an uint16 length field that could theoretically allow records 65535 octets in size. TLS does however have a lower protocol-defined limit for maximum plaintext record size. For TLS 1.2 <span>[<a href="#RFC5246" class="cite xref">RFC5246</a>]</span>, that limit is 2<sup>14</sup> = 16384 octets. TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> uses a limit of 2<sup>14</sup> + 1 = 16385 octets. In addition, TLS 1.2 allow expansion from compression and protection up to 2048 octets (though typically this expansion is only 16 octets). TLS 1.3 reduces the allowance for expansion to 256 octets.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">The "record_size_limit" extension <span>[<a href="#RFC8449" class="cite xref">RFC8449</a>]</span> enables endpoints to negotiate a lower limit for the maximum plaintext record size, but does not allow endpoints to increase the limits enforced by TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>, TLS 1.2 <span>[<a href="#RFC5246" class="cite xref">RFC5246</a>]</span>, DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>, and DTLS 1.2 <span>[<a href="#RFC6347" class="cite xref">RFC6347</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">In some use cases such as DTLS over SCTP <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span> the 2<sup>14</sup> bytes limit is a severe limitation.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This document defines a "super_jumbo_record_size_limit" flags extension (<a href="#ex" class="auto internal xref">Section 3</a>). The Record Size Limit Extension for TLS as specified in <span>[<a href="#RFC8449" class="cite xref">RFC8449</a>]</span> used in combination with the flags extension defined in this document allows endpoints to negotiate a record size limit larger than the protocol-defined maximum record size. This can be used to bump up the maximum size of protected records to 2<sup>16</sup>-1 bytes, which is larger than the default limit of 2<sup>14</sup> bytes. This extension is defined for version 1.3 of TLS and DTLS.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-1">TLS 1.3 protected records limit the inner plaintext size to 2<sup>14</sup> + 1 bytes and have 3 bytes overhead for compatibility with middleboxes expecting TLS 1.2 records. TLS-based protocols are increasingly used to secure long-lived interfaces in critical infrastructure, such as telecommunication networks. In some infrastructure use cases, the upper layer of DTLS expects a message oriented service and uses message sizes much larger than 2<sup>14</sup>-bytes.
+In these cases, the 2<sup>14</sup>-byte limit in TLS necessitates an additional protocol layer for fragmentation resulting in increased CPU and memory consumption and additional complexity. Allowing 2<sup>32</sup>-byte records would eliminate additional fragmentation in almost all use cases. In <span>[<a href="#RFC6083" class="cite xref">RFC6083</a>]</span> (DTLS over SCTP), the 2<sup>14</sup>-byte limit is a severe restriction.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document defines a "large_record_size_limit" extension that allows endpoints to negotiate a larger maximum inner plaintext size. This extension is valid in TLS 1.3 and DTLS 1.3. The extension works similarly to the "record_size_limit" extension defined in <span>[<a href="#RFC8449" class="cite xref">RFC8449</a>]</span>. Additionally, this document defines new TLS 1.3 TLSLargeCiphertext and DTLS 1.3 unified_hdr structures to enable inner plaintexts up to 2<sup>32</sup> - 256 bytes with reduced overhead. For example, inner plaintexts up to 2<sup>16</sup> - 256 bytes can be supported with 3 bytes less overhead, which is useful in constrained IoT. The "large_record_size_limit" extension is incompatible with middleboxes expecting TLS 1.2 records.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
@@ -1199,25 +1197,92 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="ex">
+<div id="the-largerecordsizelimit-extension">
 <section id="section-3">
-      <h2 id="name-the-super_jumbo_record_size">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-the-super_jumbo_record_size" class="section-name selfRef">The "super_jumbo_record_size_limit" Flags Extension</a>
+      <h2 id="name-the-large_record_size_limit">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-the-large_record_size_limit" class="section-name selfRef">The "large_record_size_limit" Extension</a>
       </h2>
-<p id="section-3-1">The "super_jumbo_record_size_limit" extension does not have any ExtensionData. When the "super_jumbo_record_size_limit" extension is negotiated, an endpoint <span class="bcp14">MUST</span> be prepared to accept protected records with ciphertexts of length 2<sup>16</sup> bytes and protected record with plaintext of length 2<sup>16</sup> - the allowed expansion. The maximum length of a protected record plaintext is therefore 2<sup>16</sup> - 2<sup>11</sup> = 63488 octets in TLS 1.2 and 2<sup>16</sup> - 2<sup>8</sup> = 65280 octets in TLS 1.3. Unprotected messages are still subject to the lower default limits in TLS/DTLS 1.3.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">The "super_jumbo_record_size_limit" extension <span class="bcp14">MUST NOT</span> be negotiated together with the "record_size_limit" extension or the "max_fragment_length" extension. A client <span class="bcp14">MUST</span> treat receipt
-of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fragment_length" as a fatal error, and it <span class="bcp14">SHOULD</span> generate an "illegal_parameter" alert.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">In TLS 1.3, the server sends the "super_jumbo_record_size_limit" extension in the EncryptedExtensions message.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">During renegotiation or resumption, the record size limit is renegotiated.  Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records.  This admits the possibility that the extension might not be negotiated when a connection is renegotiated or resumed.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">For DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> over UDP or DCCP, the Path Maximum Transmission Unit (PMTU) also limits the size of records.  The record size limit does not affect PMTU discovery and <span class="bcp14">SHOULD</span> be set independently. The record size limit is fixed during the handshake and so should be set based on constraints at the endpoint and not based on the current network environment. In comparison, the PMTU is determined by the network path and can change dynamically over time. See PMTU <span>[<a href="#RFC8201" class="cite xref">RFC8201</a>]</span> and Section 4.1 of DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> for more detail on PMTU discovery. For DTLS over TCP or SCTP, which automatically fragments and reassembles datagrams, there is no PMTU limitation.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-1">The ExtensionData of the "large_record_size_limit" extension is LargeRecordSizeLimit:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-2">
+<pre>
+   uint32 LargeRecordSizeLimit;
+</pre><a href="#section-3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3-3">LargeRecordSizeLimit denotes the maximum size, in bytes, of inner plaintexts that the endpoint is willing to receive. It includes the content type and padding (i.e., the complete length of TLSInnerPlaintext). AEAD expansion is not included.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">The large record size limit only applies to records sent toward the endpoint that advertises the limit. An endpoint can send records that are larger than the limit it advertises as its own limit. A TLS endpoint that receives a record larger than its advertised limit <span class="bcp14">MUST</span> generate a fatal "record_overflow" alert; a DTLS endpoint that receives a record larger than its advertised limit <span class="bcp14">MAY</span> either generate a fatal "record_overflow" alert or discard the record. An endpoint <span class="bcp14">MUST NOT</span> add padding to records that would cause the length of TLSInnerPlaintext to exceed the limit advertised by the other endpoint.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">Endpoints <span class="bcp14">MUST NOT</span> send a "large_record_size_limit" extension with a value smaller than 64 or larger than 2<sup>32</sup> - 256. An endpoint <span class="bcp14">MUST</span> treat receipt of a smaller or larger value as a fatal error and generate an "illegal_parameter" alert.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">The server sends the "large_record_size_limit" extension in the EncryptedExtensions message. During resumption, the limit is renegotiated. Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records. This admits the possibility that the extension might not be negotiated during resumption.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Unprotected messages and records protected with early_traffic_secret or handshake_traffic_secret are not subject to the large record size limit.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">When the "large_record_size_limit" extension is negotiated:<a href="#section-3-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-9.1">
+          <p id="section-3-9.1.1">All TLS 1.3 records protected with application_traffic_secret <span class="bcp14">MUST</span> use the TLSLargeCiphertext structure instead of the TLSCiphertext structure. The size of the length field depends on the limit advertised by the receiver. If the limit is less than 2<sup>16</sup> - 255 an uint16 is used, if the limit is larger than 2<sup>24</sup> - 256 an uint32 is used, and otherwise an uint24 is used. The length is fixed for the connection. Different lengths might be used in different directions.<a href="#section-3-9.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<div class="alignLeft art-text artwork" id="section-3-10">
+<pre>
+   enum { u16(0), u24(1), u32(2) } Length;
+</pre><a href="#section-3-10" class="pilcrow">¶</a>
+</div>
+<div class="alignLeft art-text artwork" id="section-3-11">
+<pre>
+   struct {
+       select (Length.type) {
+           case u16: uint16;
+           case u24: uint24;
+           case u32: uint24;
+       };
+    } VarLength;
+</pre><a href="#section-3-11" class="pilcrow">¶</a>
+</div>
+<div class="alignLeft art-text artwork" id="section-3-12">
+<pre>
+   struct {
+       VarLength length;
+       opaque encrypted_record[TLSLargeCiphertext.length];
+   } TLSLargeCiphertext;
+</pre><a href="#section-3-12" class="pilcrow">¶</a>
+</div>
+<ul class="normal">
+<li class="normal" id="section-3-13.1">
+          <p id="section-3-13.1.1">All DTLS 1.3 records protected with application_traffic_secret and with length present <span class="bcp14">MUST</span> use a unified_hdr structure with a length equal to the TLS 1.3 length field defined above.<a href="#section-3-13.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<div class="alignLeft art-text artwork" id="section-3-14">
+<pre>
+    0 1 2 3 4 5 6 7
+   +-+-+-+-+-+-+-+-+
+   |0|0|1|C|S|L|E E|
+   +-+-+-+-+-+-+-+-+
+   | Connection ID |   Legend:
+   | (if any,      |
+   /  length as    /   C   - Connection ID (CID) present
+   |  negotiated)  |   S   - Sequence number length
+   +-+-+-+-+-+-+-+-+   L   - Length present
+   |  8 or 16 bit  |   E   - Epoch
+   |Sequence Number|
+   +-+-+-+-+-+-+-+-+
+   | 16, 24, or 32 |
+   |  bit Length   |
+   | (if present)  |
+   +-+-+-+-+-+-+-+-+
+</pre><a href="#section-3-14" class="pilcrow">¶</a>
+</div>
+<ul class="normal">
+<li class="normal" id="section-3-15.1">
+          <p id="section-3-15.1.1">An endpoint <span class="bcp14">MAY</span> generate records protected with application_traffic_secret with inner plaintext that is equal to or smaller than the LargeRecordSizeLimit value it receives from its peer. An endpoint <span class="bcp14">MUST NOT</span> generate a protected record with inner plaintext that is larger than the LargeRecordSizeLimit value it receives from its peer.<a href="#section-3-15.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-3-16">The "large_record_size_limit" extension is not compatible with middleboxes expecting TLS 1.2 records and <span class="bcp14">SHOULD NOT</span> be negotiated where such middleboxes are expected. A server <span class="bcp14">MUST NOT</span> send extension responses to more than one of "large_record_size_limit", "record_size_limit", and "max_fragment_length". A client <span class="bcp14">MUST</span> treat receipt of more than one of "large_record_size_limit", "record_size_limit", and "max_fragment_length" as a fatal error, and it <span class="bcp14">SHOULD</span> generate an "illegal_parameter" alert.<a href="#section-3-16" class="pilcrow">¶</a></p>
+<p id="section-3-17">The Path Maximum Transmission Unit (PMTU) in DTLS also limits the size of records. The record size limit does not affect PMTU discovery and <span class="bcp14">SHOULD</span> be set independently. The record size limit is fixed during the handshake and so should be set based on constraints at the endpoint and not based on the current network environment. In comparison, the PMTU is determined by the network path and can change dynamically over time.<a href="#section-3-17" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="aead-limits">
+<div id="limits-on-key-usage">
 <section id="section-4">
-      <h2 id="name-aead-limits">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-aead-limits" class="section-name selfRef">AEAD Limits</a>
+      <h2 id="name-limits-on-key-usage">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-limits-on-key-usage" class="section-name selfRef">Limits on Key Usage</a>
       </h2>
-<p id="section-4-1">The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> and DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Increasing the maximum record size to 2<sup>16</sup> bytes while keeping the same confidentiality and integrity advantage therefore requires lower AEAD limits. When the "super_jumbo_record_size_limit" has been negotiated, existing AEAD limits shall be decreased by a factor of 4. For example, when AES-CGM is used in TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> with a 64 kB record limit, only 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> and DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Increasing the maximum record size to more than 2<sup>14</sup> + 256 bytes while keeping the same confidentiality and integrity advantage per write key therefore requires lower AEAD limits. When the "large_record_size" has been negotiated record size limit larger than 2<sup>14</sup> + 1 bytes, existing AEAD limits <span class="bcp14">SHALL</span> be decreased by a factor of (LargeRecordSizeLimit) / (2^14-256). For example, when AES-CGM is used in TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> with a 64 kB record limit, only arounf 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.<a href="#section-4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
@@ -1225,7 +1290,8 @@ of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fra
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">Large record sizes might require more memory allocation for senders and receivers. Large record sizes also means that more processing is done before verification of non-authentic records fails.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Large record sizes might require more memory allocation for senders and receivers. Additionally, larger record sizes also means that more processing is done before verification of non-authentic records fails.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The use of larger record sizes can either simplify or complicate traffic analysis, depending on the application. The LargeRecordSizeLimit is just an upper limit and it is still the sender that decides the size of the inner plaintexts up to that limit.<a href="#section-5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -1233,7 +1299,24 @@ of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fra
       <h2 id="name-iana-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-6-1">This document registers the "super_jumbo_record_size_limit" extension in the "TLS ExtensionType Values" registry established in <span>[<a href="#RFC5246" class="cite xref">RFC5246</a>]</span>. The "super_jumbo_record_size_limit" extension has been assigned a code point of TBD. The IANA registry <span>[<a href="#RFC8447" class="cite xref">RFC8447</a>]</span> [[will list|lists]] this extension as "Recommended" (i.e., "Y") and indicates that it may appear in the ClientHello (CH) or EncryptedExtensions (EE) messages in TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">IANA is requested to assign a new value in the TLS ExtensionType Values registry defined by <span>[<a href="#RFC8447" class="cite xref">RFC8447</a>]</span>:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-2.1">
+          <p id="section-6-2.1.1">The Extension Name should be large_record_size_limit<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.2">
+          <p id="section-6-2.2.1">The TLS 1.3 value should be CH, EE<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.3">
+          <p id="section-6-2.3.1">The DTLS-Only value should be N<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.4">
+          <p id="section-6-2.4.1">The Recommended value should be Y<a href="#section-6-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.5">
+          <p id="section-6-2.5.1">The Reference should be this document<a href="#section-6-2.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 </section>
 </div>
 <section id="section-7">
@@ -1246,10 +1329,6 @@ of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fra
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.ietf-tls-tlsflags">[I-D.ietf-tls-tlsflags]</dt>
-        <dd>
-<span class="refAuthor">Nir, Y.</span>, <span class="refTitle">"A Flags Extension for TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-tlsflags-12</span>, <time datetime="2023-07-23" class="refDate">23 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-tlsflags-12">https://datatracker.ietf.org/doc/html/draft-ietf-tls-tlsflags-12</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
@@ -1267,8 +1346,12 @@ of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fra
 <span class="refAuthor">Salowey, J.</span> and <span class="refAuthor">S. Turner</span>, <span class="refTitle">"IANA Registry Updates for TLS and DTLS"</span>, <span class="seriesInfo">RFC 8447</span>, <span class="seriesInfo">DOI 10.17487/RFC8447</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8447">https://www.rfc-editor.org/rfc/rfc8447</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8449">[RFC8449]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Thomson, M.</span>, <span class="refTitle">"Record Size Limit Extension for TLS"</span>, <span class="seriesInfo">RFC 8449</span>, <span class="seriesInfo">DOI 10.17487/RFC8449</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8449">https://www.rfc-editor.org/rfc/rfc8449</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9147">[RFC9147]</dt>
+      <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9147</span>, <span class="seriesInfo">DOI 10.17487/RFC9147</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9147">https://www.rfc-editor.org/rfc/rfc9147</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1279,25 +1362,9 @@ of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fra
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC5246">[RFC5246]</dt>
-        <dd>
-<span class="refAuthor">Dierks, T.</span> and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.2"</span>, <span class="seriesInfo">RFC 5246</span>, <span class="seriesInfo">DOI 10.17487/RFC5246</span>, <time datetime="2008-08" class="refDate">August 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5246">https://www.rfc-editor.org/rfc/rfc5246</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC6083">[RFC6083]</dt>
-        <dd>
-<span class="refAuthor">Tuexen, M.</span>, <span class="refAuthor">Seggelmann, R.</span>, and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"Datagram Transport Layer Security (DTLS) for Stream Control Transmission Protocol (SCTP)"</span>, <span class="seriesInfo">RFC 6083</span>, <span class="seriesInfo">DOI 10.17487/RFC6083</span>, <time datetime="2011-01" class="refDate">January 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6083">https://www.rfc-editor.org/rfc/rfc6083</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC6347">[RFC6347]</dt>
-        <dd>
-<span class="refAuthor">Rescorla, E.</span> and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"Datagram Transport Layer Security Version 1.2"</span>, <span class="seriesInfo">RFC 6347</span>, <span class="seriesInfo">DOI 10.17487/RFC6347</span>, <time datetime="2012-01" class="refDate">January 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6347">https://www.rfc-editor.org/rfc/rfc6347</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8201">[RFC8201]</dt>
-        <dd>
-<span class="refAuthor">McCann, J.</span>, <span class="refAuthor">Deering, S.</span>, <span class="refAuthor">Mogul, J.</span>, and <span class="refAuthor">R. Hinden, Ed.</span>, <span class="refTitle">"Path MTU Discovery for IP version 6"</span>, <span class="seriesInfo">STD 87</span>, <span class="seriesInfo">RFC 8201</span>, <span class="seriesInfo">DOI 10.17487/RFC8201</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8201">https://www.rfc-editor.org/rfc/rfc8201</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC9147">[RFC9147]</dt>
       <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9147</span>, <span class="seriesInfo">DOI 10.17487/RFC9147</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9147">https://www.rfc-editor.org/rfc/rfc9147</a>&gt;</span>. </dd>
+<span class="refAuthor">Tuexen, M.</span>, <span class="refAuthor">Seggelmann, R.</span>, and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"Datagram Transport Layer Security (DTLS) for Stream Control Transmission Protocol (SCTP)"</span>, <span class="seriesInfo">RFC 6083</span>, <span class="seriesInfo">DOI 10.17487/RFC6083</span>, <time datetime="2011-01" class="refDate">January 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6083">https://www.rfc-editor.org/rfc/rfc6083</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1308,7 +1375,7 @@ of "super_jumbo_record_size_limit" together with "record_size_limit" or "max_fra
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">Add your name here.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The authors would like to thank <span class="contact-name">Stephen Farrell</span>, <span class="contact-name">Benjamin Kaduk</span>, and <span class="contact-name">Martin Thomson</span> for their valuable comments and feedback. Some of the text were inspired by and borrowed from <span>[<a href="#RFC8449" class="cite xref">RFC8449</a>]</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
