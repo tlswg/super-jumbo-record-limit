@@ -16,11 +16,12 @@ Expires: 9 January 2025                                          Siemens
 
 Abstract
 
-   TLS 1.3 records limit the inner plaintext size to 2^14 + 1 bytes and
-   have 3 bytes overhead for compatibility with middleboxes.  This
-   document defines a TLS extension that enables endpoints to negotiate
-   a larger maximum inner plaintext size, up to 2^32 - 256 bytes, with
-   reduced overhead.
+   TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to
+   2^14 + 1 bytes, which includes one byte for the content type, and
+   have a 3-byte overhead due to the fixed fields opaque_type and
+   legacy_record_version.  This document defines a TLS extension that
+   allows endpoints to negotiate a larger maximum inner plaintext size,
+   up to 2^32 - 256 bytes, while reducing overhead.
 
 About This Document
 
@@ -87,10 +88,11 @@ Table of Contents
 
 1.  Introduction
 
-   TLS 1.3 protected records limit the inner plaintext size to 2^14 + 1
-   bytes and have 3 bytes overhead for compatibility with middleboxes
-   expecting TLS 1.2 records.  TLS-based protocols are increasingly used
-   to secure long-lived interfaces in critical infrastructure, such as
+   TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to
+   2^14 + 1 bytes, which includes one byte for the content type, and
+   have a 3-byte overhead due to the fixed fields opaque_type and
+   legacy_record_version.  TLS-based protocols are increasingly used to
+   secure long-lived interfaces in critical infrastructure, such as
    telecommunication networks.  In some infrastructure use cases, the
    upper layer of DTLS expects a message oriented service and uses
    message sizes much larger than 2^14-bytes.  In these cases, the
