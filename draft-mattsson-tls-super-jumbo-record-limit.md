@@ -55,14 +55,13 @@ informative:
 
 --- abstract
 
-TLS 1.3 records limit the inner plaintext size to 2<sup>14</sup> + 1 bytes and have 3 bytes overhead for compatibility with middleboxes. This document defines a TLS extension that enables endpoints to negotiate a larger maximum inner plaintext size, up to 2<sup>32</sup> - 256 bytes, with reduced overhead.
+TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to 2<sup>14</sup> + 1 bytes, which includes one byte for the content type, and have a 3-byte overhead due to the fixed fields opaque_type and legacy_record_version. This document defines a TLS extension that allows endpoints to negotiate a larger maximum inner plaintext size, up to 2<sup>32</sup> - 256 bytes, while reducing overhead.
 
 --- middle
 
 # Introduction
 
-TLS 1.3 protected records limit the inner plaintext size to 2<sup>14</sup> + 1 bytes and have 3 bytes overhead for compatibility with middleboxes expecting TLS 1.2 records. TLS-based protocols are increasingly used to secure long-lived interfaces in critical infrastructure, such as telecommunication networks. In some infrastructure use cases, the upper layer of DTLS expects a message oriented service and uses message sizes much larger than 2<sup>14</sup>-bytes.
-In these cases, the 2<sup>14</sup>-byte limit in TLS necessitates an additional protocol layer for fragmentation resulting in increased CPU and memory consumption and additional complexity. Allowing 2<sup>32</sup>-byte records would eliminate additional fragmentation in almost all use cases. In {{RFC6083}} (DTLS over SCTP), the 2<sup>14</sup>-byte limit is a severe restriction.
+TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to 2<sup>14</sup> + 1 bytes, which includes one byte for the content type, and have a 3-byte overhead due to the fixed fields opaque_type and legacy_record_version. TLS-based protocols are increasingly used to secure long-lived interfaces in critical infrastructure, such as telecommunication networks. In some infrastructure use cases, the upper layer of DTLS expects a message oriented service and uses message sizes much larger than 2<sup>14</sup>-bytes. In these cases, the 2<sup>14</sup>-byte limit in TLS necessitates an additional protocol layer for fragmentation resulting in increased CPU and memory consumption and additional complexity. Allowing 2<sup>32</sup>-byte records would eliminate additional fragmentation in almost all use cases. In {{RFC6083}} (DTLS over SCTP), the 2<sup>14</sup>-byte limit is a severe restriction.
 
 This document defines a "large_record_size_limit" extension that allows endpoints to negotiate a larger maximum inner plaintext size. This extension is valid in TLS 1.3 and DTLS 1.3. The extension works similarly to the "record_size_limit" extension defined in {{RFC8449}}. Additionally, this document defines new TLS 1.3 TLSLargeCiphertext and DTLS 1.3 unified_hdr structures to enable inner plaintexts up to 2<sup>32</sup> - 256 bytes with reduced overhead. For example, inner plaintexts up to 2<sup>16</sup> - 256 bytes can be supported with 3 bytes less overhead, which is useful in constrained IoT. The "large_record_size_limit" extension is incompatible with middleboxes expecting TLS 1.2 records.
 
