@@ -5,10 +5,10 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 27 September 2024                                       Siemens
+Expires: 9 January 2025                                          Siemens
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
-                                                           26 March 2024
+                                                             8 July 2024
 
 
        Large Record Sizes for TLS and DTLS with Reduced Overhead
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 September 2024.
+   This Internet-Draft will expire on 9 January 2025.
 
 Copyright Notice
 
@@ -92,12 +92,13 @@ Table of Contents
    expecting TLS 1.2 records.  TLS-based protocols are increasingly used
    to secure long-lived interfaces in critical infrastructure, such as
    telecommunication networks.  In some infrastructure use cases, the
-   2^14-byte limit in TLS leads to more fragmentation, resulting in
-   increased CPU and memory consumption, and might necessitate an
-   additional protocol layer for fragmentation.  Allowing 2^32-byte
-   records would eliminate additional fragmentation in almost all use
-   cases.  In [RFC6083] (DTLS over SCTP), the 2^14-byte limit is a
-   severe restriction.
+   upper layer of DTLS expects a message oriented service and uses
+   message sizes much larger than 2^14-bytes.  In these cases, the
+   2^14-byte limit in TLS necessitates an additional protocol layer for
+   fragmentation resulting in increased CPU and memory consumption and
+   additional complexity.  Allowing 2^32-byte records would eliminate
+   additional fragmentation in almost all use cases.  In [RFC6083] (DTLS
+   over SCTP), the 2^14-byte limit is a severe restriction.
 
    This document defines a "large_record_size_limit" extension that
    allows endpoints to negotiate a larger maximum inner plaintext size.
