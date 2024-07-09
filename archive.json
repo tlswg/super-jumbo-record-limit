@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-07T00:48:48.818456+00:00",
+  "timestamp": "2024-07-09T00:44:04.497759+00:00",
   "repo": "emanjon/tls-super-jumbo-record-limit",
   "labels": [
     {
@@ -220,6 +220,34 @@
       "mergedBy": "emanjon",
       "mergeCommit": {
         "oid": "20eb88d6f8d3e770a806ae462e7279b93c4e70a0"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOLXcmPc50nxVD",
+      "title": "In my view, describe the use case more clearly.",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/pull/7",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-07T21:39:05Z",
+      "updatedAt": "2024-07-08T21:15:44Z",
+      "baseRepository": "emanjon/tls-super-jumbo-record-limit",
+      "baseRefName": "main",
+      "baseRefOid": "6b43c4556baf47e425424923b4dd30838eed3435",
+      "headRepository": "emanjon/tls-super-jumbo-record-limit",
+      "headRefName": "suggestions",
+      "headRefOid": "06d01c75611923f9cd756194a10ef60f5f935491",
+      "closedAt": "2024-07-08T21:15:44Z",
+      "mergedAt": "2024-07-08T21:15:44Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "8d70ec1ca03cb0fbe41d41b7865820e773f1c199"
       },
       "comments": [],
       "reviews": []
