@@ -5,10 +5,10 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 9 January 2025                                          Siemens
+Expires: 9 March 2025                                            Siemens
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
-                                                             8 July 2024
+                                                        5 September 2024
 
 
        Large Record Sizes for TLS and DTLS with Reduced Overhead
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 January 2025.
+   This Internet-Draft will expire on 9 March 2025.
 
 Copyright Notice
 
@@ -178,7 +178,7 @@ Table of Contents
           select (Length.type) {
               case u16: uint16;
               case u24: uint24;
-              case u32: uint24;
+              case u32: uint32;
           };
        } VarLength;
 
