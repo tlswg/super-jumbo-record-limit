@@ -99,7 +99,7 @@ When the "large_record_size_limit" extension is negotiated:
        select (Length.type) {
            case u16: uint16;
            case u24: uint24;
-           case u32: uint24;
+           case u32: uint32;
        };
     } VarLength;
 ~~~~~~~~
