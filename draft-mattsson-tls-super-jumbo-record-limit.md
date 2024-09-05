@@ -163,6 +163,25 @@ IANA is requested to assign a new value in the TLS ExtensionType Values registry
 
 --- back
 
+# Change Log
+{:removeInRFC="true" numbered="false"}
+
+Changes from -04 to -05:
+
+* Grammar and comprehension tweaks.
+* Added change log
+
+Changes from -03 to -04:
+
+* Corrected uint24 to uint32.
+
+Changes from -02 to -03:
+
+* Major rewrite based on discussions at IETF 119
+* New independant extension instead of flag extension used together with record_size_limit
+* New record format without opaque_type and legacy_record_version fields. This reduces overhead
+* Support inner plaintext size up to 2^32 - 256 bytes
+
 # Acknowledgments
 {:numbered="false"}
 
