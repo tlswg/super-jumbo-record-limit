@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-05T00:49:01.263720+00:00",
+  "timestamp": "2024-09-08T00:53:59.926221+00:00",
   "repo": "emanjon/tls-super-jumbo-record-limit",
   "labels": [
     {
@@ -248,6 +248,34 @@
       "mergedBy": "emanjon",
       "mergeCommit": {
         "oid": "8d70ec1ca03cb0fbe41d41b7865820e773f1c199"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOLXcmPc56e9BS",
+      "title": "Grammar and comprehension tweaks to abstract",
+      "url": "https://github.com/emanjon/tls-super-jumbo-record-limit/pull/8",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The run-on talking about overhead was a little confusing to me.  A separate sentence seems better.",
+      "createdAt": "2024-09-05T07:27:47Z",
+      "updatedAt": "2024-09-05T08:16:46Z",
+      "baseRepository": "emanjon/tls-super-jumbo-record-limit",
+      "baseRefName": "main",
+      "baseRefOid": "47c1dc8c7868dabeb1e6caf6d59d3b0ed4bf0b12",
+      "headRepository": "martinthomson/tls-super-jumbo-record-limit",
+      "headRefName": "patch-1",
+      "headRefOid": "f608b641a2d583e00eed959a1691ad8b68ee8dae",
+      "closedAt": "2024-09-05T08:16:46Z",
+      "mergedAt": "2024-09-05T08:16:46Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "3b2aaf11a0b6503e90e9d8db94acc77855b98aea"
       },
       "comments": [],
       "reviews": []
