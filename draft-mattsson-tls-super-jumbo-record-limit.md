@@ -3,7 +3,7 @@ title: "Large Record Sizes for TLS and DTLS with Reduced Overhead"
 abbrev: "Large Record Sizes for TLS"
 category: std
 
-docname: draft-mattsson-tls-super-jumbo-record-limit-latest
+docname: draft-ietf-tls-super-jumbo-record-limit-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
@@ -20,7 +20,7 @@ venue:
   type: "Working Group"
   mail: "tls@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/tls/"
-  github: "emanjon/tls-super-jumbo-record-limit"
+  github: "tlswg/super-jumbo-record-limit"
   latest: "https://emanjon.github.io/tls-super-jumbo-record-limit/draft-mattsson-tls-super-jumbo-record-limit.html"
 
 author:
