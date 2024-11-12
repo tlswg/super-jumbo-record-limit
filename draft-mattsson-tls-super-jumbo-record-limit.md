@@ -21,7 +21,7 @@ venue:
   mail: "tls@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/tls/"
   github: "tlswg/super-jumbo-record-limit"
-  latest: "https://emanjon.github.io/tls-super-jumbo-record-limit/draft-mattsson-tls-super-jumbo-record-limit.html"
+  latest: "https://tlswg.github.io/super-jumbo-record-limit/draft-ietf-tls-super-jumbo-record-limit.html"
 
 author:
 - initials: J.
