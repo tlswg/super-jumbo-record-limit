@@ -2,9 +2,9 @@
 
 This is the working area for the individual Internet-Draft, "Large Record Sizes for TLS and DTLS".
 
-* [Editor's Copy](https://emanjon.github.io/tls-super-jumbo-record-limit/#go.draft-mattsson-tls-super-jumbo-record-limit.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-mattsson-tls-super-jumbo-record-limit)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-mattsson-tls-super-jumbo-record-limit)
+* [Editor's Copy](https://tlswg.github.io/super-jumbo-record-limit/#go.draft-ietf-tls-super-jumbo-record-limit.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-tls-super-jumbo-record-limit)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-tls-super-jumbo-record-limit)
 * [Compare Editor's Copy to Individual Draft](https://emanjon.github.io/tls-super-jumbo-record-limit/#go.draft-mattsson-tls-super-jumbo-record-limit.diff)
 
 
