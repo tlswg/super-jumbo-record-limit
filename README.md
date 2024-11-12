@@ -4,14 +4,14 @@ This is the working area for the individual Internet-Draft, "Large Record Sizes 
 
 * [Editor's Copy](https://tlswg.github.io/super-jumbo-record-limit/#go.draft-ietf-tls-super-jumbo-record-limit.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-tls-super-jumbo-record-limit)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-tls-super-jumbo-record-limit)
-* [Compare Editor's Copy to Individual Draft](https://emanjon.github.io/tls-super-jumbo-record-limit/#go.draft-mattsson-tls-super-jumbo-record-limit.diff)
+* [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-tls-super-jumbo-record-limit)
+* [Compare Editor's Copy to Working Group Draft](https://tlswg.github.io/super-jumbo-record-limit/#go.draft-ietf-tls-super-jumbo-record-limit.diff)
 
 
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/emanjon/tls-super-jumbo-record-limit/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/tlswg/tls-super-jumbo-record-limit/blob/main/CONTRIBUTING.md).
 
 Contributions can be made by creating pull requests.
 The GitHub interface supports creating pull requests using the Edit (✏) button.
