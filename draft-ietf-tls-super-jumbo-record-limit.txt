@@ -5,14 +5,14 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 9 March 2025                                            Siemens
+Expires: 16 May 2025                                             Siemens
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
-                                                        5 September 2024
+                                                        12 November 2024
 
 
        Large Record Sizes for TLS and DTLS with Reduced Overhead
-           draft-mattsson-tls-super-jumbo-record-limit-latest
+             draft-ietf-tls-super-jumbo-record-limit-latest
 
 Abstract
 
@@ -28,10 +28,10 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://emanjon.github.io/tls-super-jumbo-record-limit/draft-
-   mattsson-tls-super-jumbo-record-limit.html.  Status information for
-   this document may be found at https://datatracker.ietf.org/doc/draft-
-   mattsson-tls-super-jumbo-record-limit/.
+   https://tlswg.github.io/super-jumbo-record-limit/draft-ietf-tls-
+   super-jumbo-record-limit.html.  Status information for this document
+   may be found at https://datatracker.ietf.org/doc/draft-ietf-tls-
+   super-jumbo-record-limit/.
 
    Discussion of this document takes place on the Transport Layer
    Security Working Group mailing list (mailto:tls@ietf.org), which is
@@ -39,7 +39,7 @@ About This Document
    at https://www.ietf.org/mailman/listinfo/tls/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/emanjon/tls-super-jumbo-record-limit.
+   https://github.com/tlswg/super-jumbo-record-limit.
 
 Status of This Memo
 
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 March 2025.
+   This Internet-Draft will expire on 16 May 2025.
 
 Copyright Notice
 
