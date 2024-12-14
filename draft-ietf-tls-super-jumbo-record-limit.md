@@ -32,8 +32,9 @@ author:
 - initials: H.
   surname: Tschofenig
   name: Hannes Tschofenig
-  org: Siemens
-  email: hannes.tschofenig@gmx.net
+  org: University of Applied Sciences Bonn-Rhein-Sieg
+  abbrev: H-BRS
+  email: Hannes.Tschofenig@gmx.net
 - initials: M.
   surname: Tüxen
   name: Michael Tüxen
