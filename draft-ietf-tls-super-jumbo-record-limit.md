@@ -144,7 +144,7 @@ The maximum record size limit is an input to the AEAD limits calculations in TLS
 
 # Security Considerations
 
-Large record sizes might require more memory allocation for senders and receivers. Additionally, larger record sizes also means that more processing is done before verification of non-authentic records fails.
+Large record sizes might require more memory allocation for senders and receivers. Additionally, larger record sizes also means that more processing is done before verification of non-authentic records fails. TLS implementations MUST NOT provide access to the decrypted message content until after its integrity is confirmed.
 
 The use of larger record sizes can either simplify or complicate traffic analysis, depending on the application. The LargeRecordSizeLimit is just an upper limit and it is still the sender that decides the size of the inner plaintexts up to that limit.
 
