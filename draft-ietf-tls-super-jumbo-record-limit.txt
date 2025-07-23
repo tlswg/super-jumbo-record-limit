@@ -5,10 +5,10 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 24 August 2025                                            H-BRS
+Expires: 24 January 2026                                           H-BRS
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
-                                                        20 February 2025
+                                                            23 July 2025
 
 
        Large Record Sizes for TLS and DTLS with Reduced Overhead
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 August 2025.
+   This Internet-Draft will expire on 24 January 2026.
 
 Copyright Notice
 
@@ -252,7 +252,8 @@ Table of Contents
    Large record sizes might require more memory allocation for senders
    and receivers.  Additionally, larger record sizes also means that
    more processing is done before verification of non-authentic records
-   fails.
+   fails.  TLS implementations MUST NOT provide access to the decrypted
+   message content until after its integrity is confirmed.
 
    The use of larger record sizes can either simplify or complicate
    traffic analysis, depending on the application.  The
