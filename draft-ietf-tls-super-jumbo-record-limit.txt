@@ -5,10 +5,10 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 24 January 2026                                           H-BRS
+Expires: 25 January 2026                                           H-BRS
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
-                                                            23 July 2025
+                                                            24 July 2025
 
 
        Large Record Sizes for TLS and DTLS with Reduced Overhead
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 January 2026.
+   This Internet-Draft will expire on 25 January 2026.
 
 Copyright Notice
 
@@ -342,9 +342,10 @@ Change Log
 
 Acknowledgments
 
-   The authors would like to thank Stephen Farrell, Benjamin Kaduk, and
-   Martin Thomson for their valuable comments and feedback.  Some of the
-   text were inspired by and borrowed from [RFC8449].
+   The authors would like to thank Stephen Farrell, Benjamin Kaduk,
+   Benjamin Schwartz, and Martin Thomson for their valuable comments and
+   feedback.  Some of the text were inspired by and borrowed from
+   [RFC8449].
 
 Authors' Addresses
 
