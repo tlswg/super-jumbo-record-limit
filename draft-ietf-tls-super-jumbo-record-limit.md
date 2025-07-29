@@ -93,7 +93,7 @@ When the "large_record_size_limit" extension is negotiated:
 
 * All TLS 1.3 records protected with application_traffic_secret MUST use the TLSLargeCiphertext structure instead of the TLSCiphertext structure.
 
-  The size of the length field is variable and depends on the size of the encrypted_record. It uses a format similar to the variable-length encoding for non-negative integer values used in QUIC and specified in Section 16 of {{RFC9000}}. The variable-length integer encoding reserves the two most significant bits of the first byte to encode the integer encoding length in bytes. The integer value is encoded on the remaining bits, in network byte order. This means that integers are encoded on 1, 2, 3, or 4 bytes and can encode 6-, 14-, 22-, or 30-bit values, respectively. {{fig-sizes}} summarizes the encoding properties. Values do not need to be encoded on the minimum number of bytes necessary.
+  The size of the length field is variable and depends on the size of the encrypted_record. It uses a format similar to the variable-length encoding for non-negative integer values used in QUIC and specified in {{Section 16 of RFC9000}}. The variable-length integer encoding reserves the two most significant bits of the first byte to encode the integer encoding length in bytes. The integer value is encoded on the remaining bits, in network byte order. This means that integers are encoded on 1, 2, 3, or 4 bytes and can encode 6-, 14-, 22-, or 30-bit values, respectively. {{fig-sizes}} summarizes the encoding properties. Values do not need to be encoded on the minimum number of bytes necessary.
 
 ~~~~~~~~
    struct {
