@@ -49,6 +49,7 @@ normative:
   RFC8447:
   RFC8449:
   RFC9147:
+  RFC9420:
 
 informative:
 
@@ -93,21 +94,21 @@ When the "large_record_size_limit" extension is negotiated:
 
 * All TLS 1.3 records protected with application_traffic_secret MUST use the TLSLargeCiphertext structure instead of the TLSCiphertext structure.
 
-  The size of the length field is variable and depends on the size of the encrypted_record. It uses a format similar to the variable-length encoding for non-negative integer values used in QUIC and specified in {{Section 16 of RFC9000}}. The variable-length integer encoding reserves the two most significant bits of the first byte to encode the integer encoding length in bytes. The integer value is encoded on the remaining bits, in network byte order. This means that integers are encoded on 1, 2, 3, or 4 bytes and can encode 6-, 14-, 22-, or 30-bit values, respectively. {{fig-sizes}} summarizes the encoding properties. Values do not need to be encoded on the minimum number of bytes necessary.
+  Instead of using a fixed-size length field, we use a variable-size length using a variable-length unsigned integer encoding as specified in {{Section 2.1.2 of RFC9420}}. We define the name of the new type to be varuint. varuint is similar to the variable-length encoding for non-negative integer values used in QUIC and specified in {{Section 16 of RFC9000}} but require minimum-size encoding. As defined in {{Section 2.1.2 of RFC9420}}, the varuint encoding reserves the two most significant bits of the first byte to encode the base 2 logarithm of the integer encoding length in bytes. The integer value is encoded on the remaining bits, so that the overall value is in network byte order. The encoded value MUST use the smallest number of bits required to represent the value. When decoding, values using more bits than necessary MUST be treated as malformed. This means that integers are encoded in 1, 2, or 4 bytes and can encode 6-, 14-, or 30-bit values, respectively. {{fig-sizes}} summarizes the encoding properties.
 
 ~~~~~~~~
    struct {
-       opaque length<1..4>;
+       varuint length;
        opaque encrypted_record[TLSLargeCiphertext.length];
    } TLSLargeCiphertext;
 ~~~~~~~~
 
-| 2MSB | Length | Usable Bits | Range        |
-| 00   | 1      | 6           | 0–63         |
-| 01   | 2      | 14          | 0–16383      |
-| 10   | 3      | 22          | 0–4194303    |
-| 11   | 4      | 30          | 0–1073741823 |
-{: #fig-sizes title="Summary of Integer Encodings."}
+| Prefix | Length  | Usable Bits | Min   | Max        |
+| 00     | 1       | 6           | 0     | 63         |  
+| 01     | 2       | 14          | 64    | 16383      |
+| 10     | 4       | 30          | 16384 | 1073741823 |
+| 11     | invalid | -           | -     | -          |
+{: #fig-sizes title="Summary of varuint Encodings."}
 
 * All DTLS 1.3 records protected with application_traffic_secret and with length present MUST use a unified_hdr structure with a length equal to the TLS 1.3 length field defined above.
 
