@@ -168,8 +168,9 @@ IANA is requested to assign a new value in the TLS ExtensionType Values registry
 
 Changes from -01 to -02:
 
-* Variable length field as defined in MLS
+* Variable length field equal to the one defined in MLS
 * Clarification that the extension value is equal to RFC8449
+* Clarification and corrections on AEAD limits
 
 Changes from -00 to -01:
 
