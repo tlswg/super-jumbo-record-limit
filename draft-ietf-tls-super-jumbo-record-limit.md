@@ -49,22 +49,24 @@ normative:
   RFC8447:
   RFC8449:
   RFC9147:
+  RFC9420:
 
 informative:
 
   RFC6083:
+  RFC9000:
 
 --- abstract
 
-TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to 2<sup>14</sup> + 1 bytes, which includes one byte for the content type. Records also have a 3-byte overhead due to the fixed opaque_type and legacy_record_version fields. This document defines a TLS extension that allows endpoints to negotiate a larger maximum inner plaintext size, up to 2<sup>32</sup> - 256 bytes, while reducing overhead.
+TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to 2<sup>14</sup> + 1 bytes, which includes one byte for the content type. Records also have a 3-byte overhead due to the fixed opaque_type and legacy_record_version fields. This document defines a TLS extension that allows endpoints to negotiate a larger maximum inner plaintext size, up to 2<sup>30</sup> - 256 bytes, while reducing overhead.
 
 --- middle
 
 # Introduction
 
-TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to 2<sup>14</sup> + 1 bytes, which includes one byte for the content type. Records also have a 3-byte overhead due to the fixed opaque_type and legacy_record_version fields. TLS-based protocols are increasingly used to secure long-lived interfaces in critical infrastructure, such as telecommunication networks. In some infrastructure use cases, the upper layer of DTLS expects a message oriented service and uses message sizes much larger than 2<sup>14</sup>-bytes. In these cases, the 2<sup>14</sup>-byte limit in TLS necessitates an additional protocol layer for fragmentation, resulting in increased CPU and memory consumption and additional complexity. Allowing 2<sup>32</sup>-byte records would eliminate additional fragmentation in almost all use cases. In {{RFC6083}} (DTLS over SCTP), the 2<sup>14</sup>-byte limit is a severe restriction.
+TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to 2<sup>14</sup> + 1 bytes, which includes one byte for the content type. Records also have a 3-byte overhead due to the fixed opaque_type and legacy_record_version fields. TLS-based protocols are increasingly used to secure long-lived interfaces in critical infrastructure, such as telecommunication networks. In some infrastructure use cases, the upper layer of DTLS expects a message oriented service and uses message sizes much larger than 2<sup>14</sup>-bytes. In these cases, the 2<sup>14</sup>-byte limit in TLS necessitates an additional protocol layer for fragmentation, resulting in increased CPU and memory consumption and additional complexity. Allowing 2<sup>30</sup>-byte records would eliminate additional fragmentation in almost all use cases. In {{RFC6083}} (DTLS over SCTP), the 2<sup>14</sup>-byte limit is a severe restriction.
 
-This document defines a "large_record_size_limit" extension that allows endpoints to negotiate a larger maximum inner plaintext (TLSInnerPlaintext) size. This extension is valid in TLS 1.3 and DTLS 1.3. The extension works similarly to the "record_size_limit" extension defined in {{RFC8449}}. Additionally, this document defines new TLS 1.3 TLSLargeCiphertext and DTLS 1.3 unified_hdr structures to enable inner plaintexts up to 2<sup>32</sup> - 256 bytes with reduced overhead. For example, inner plaintexts up to 2<sup>16</sup> - 256 bytes can be supported with 3 bytes less overhead, which is useful in constrained IoT environments. The "large_record_size_limit" extension is incompatible with middleboxes expecting TLS 1.2 records.
+This document defines a "large_record_size_limit" extension that allows endpoints to negotiate a larger maximum inner plaintext (TLSInnerPlaintext) size. This extension is valid in TLS 1.3 and DTLS 1.3. The extension works similarly to the "record_size_limit" extension defined in {{RFC8449}}. Additionally, this document defines new TLS 1.3 TLSLargeCiphertext and DTLS 1.3 unified_hdr structures to enable inner plaintexts up to 2<sup>30</sup> - 256 bytes with reduced overhead. For example, ciphertexts up to 64 bytes can be supported with 4 bytes less overhead and ciphertexts up to 2<sup>14</sup> bytes can be supported with 3 bytes less overhead, which is useful in constrained IoT environments. The "large_record_size_limit" extension is incompatible with middleboxes expecting TLS 1.2 records.
 
 # Terminology
 
@@ -78,11 +80,11 @@ The ExtensionData of the "large_record_size_limit" extension is LargeRecordSizeL
    uint32 LargeRecordSizeLimit;
 ~~~~~~~~
 
-LargeRecordSizeLimit denotes the maximum size, in bytes, of inner plaintexts that the endpoint is willing to receive. It includes the content type and padding (i.e., the complete length of TLSInnerPlaintext). AEAD expansion is not included.
+LargeRecordSizeLimit denotes the maximum size, in bytes, of inner plaintexts that the endpoint is willing to receive. It includes the content type and padding (i.e., the complete length of TLSInnerPlaintext). AEAD expansion is not included. This is the same value as RecordSizeLimit negotiated in the "record_size_limit" extension {{RFC8449}}.
 
 The large record size limit only applies to records sent toward the endpoint that advertises the limit. An endpoint can send records that are larger than the limit it advertises as its own limit. A TLS endpoint that receives a record larger than its advertised limit MUST generate a fatal "record_overflow" alert; a DTLS endpoint that receives a record larger than its advertised limit MAY either generate a fatal "record_overflow" alert or discard the record. An endpoint MUST NOT add padding to records that would cause the length of TLSInnerPlaintext to exceed the limit advertised by the other endpoint.
 
-Endpoints MUST NOT send a "large_record_size_limit" extension with a value smaller than 64 or larger than 2<sup>32</sup> - 256. An endpoint MUST treat receipt of a smaller or larger value as a fatal error and generate an "illegal_parameter" alert.
+Endpoints MUST NOT send a "large_record_size_limit" extension with a value smaller than 64 or larger than 2<sup>30</sup> - 256. An endpoint MUST treat receipt of a smaller or larger value as a fatal error and generate an "illegal_parameter" alert.
 
 The server sends the "large_record_size_limit" extension in the EncryptedExtensions message. During resumption, the limit is renegotiated. Records are subject to the limits that were set in the handshake that produces the keys that are used to protect those records. This admits the possibility that the extension might not be negotiated during resumption.
 
@@ -90,26 +92,23 @@ Unprotected messages and records protected with early_traffic_secret or handshak
 
 When the "large_record_size_limit" extension is negotiated:
 
-* All TLS 1.3 records protected with application_traffic_secret MUST use the TLSLargeCiphertext structure instead of the TLSCiphertext structure. The size of the length field depends on the limit advertised by the receiver. If the limit is less than 2<sup>16</sup> - 255 an uint16 is used, if the limit is larger than 2<sup>24</sup> - 256 an uint32 is used, and otherwise an uint24 is used. The length is fixed for the connection. Different lengths might be used in different directions.
+* All TLS 1.3 records protected with application_traffic_secret MUST use the TLSLargeCiphertext structure instead of the TLSCiphertext structure.
+
+  Instead of using a fixed-size length field, we use a variable-size length using a variable-length unsigned integer encoding as specified in {{Section 2.1.2 of RFC9420}}. We define the name of the new type to be varuint. varuint is similar to the variable-length encoding for non-negative integer values used in QUIC and specified in {{Section 16 of RFC9000}} but require minimum-size encoding. As defined in {{Section 2.1.2 of RFC9420}}, the varuint encoding reserves the two most significant bits of the first byte to encode the base 2 logarithm of the integer encoding length in bytes. The integer value is encoded on the remaining bits, so that the overall value is in network byte order. The encoded value MUST use the smallest number of bits required to represent the value. When decoding, values using more bits than necessary MUST be treated as malformed. This means that integers are encoded in 1, 2, or 4 bytes and can encode 6-, 14-, or 30-bit values, respectively. {{fig-sizes}} summarizes the encoding properties.
 
 ~~~~~~~~
-   enum { u16(0), u24(1), u32(2) } Length;
-~~~~~~~~
-~~~~~~~~
    struct {
-       select (Length.type) {
-           case u16: uint16;
-           case u24: uint24;
-           case u32: uint32;
-       };
-    } VarLength;
-~~~~~~~~
-~~~~~~~~
-   struct {
-       VarLength length;
+       varuint length;
        opaque encrypted_record[TLSLargeCiphertext.length];
    } TLSLargeCiphertext;
 ~~~~~~~~
+
+| Prefix | Length  | Usable Bits | Min   | Max        |
+| 00     | 1       | 6           | 0     | 63         |  
+| 01     | 2       | 14          | 64    | 16383      |
+| 10     | 4       | 30          | 16384 | 1073741823 |
+| 11     | invalid | -           | -     | -          |
+{: #fig-sizes title="Summary of varuint Encodings."}
 
 * All DTLS 1.3 records protected with application_traffic_secret and with length present MUST use a unified_hdr structure with a length equal to the TLS 1.3 length field defined above.
 
@@ -126,8 +125,8 @@ When the "large_record_size_limit" extension is negotiated:
    |  8 or 16 bit  |   E   - Epoch
    |Sequence Number|
    +-+-+-+-+-+-+-+-+
-   | 16, 24, or 32 |
-   |  bit Length   |
+   | 8, 16, or 32  |
+   | bit Length    |
    | (if present)  |
    +-+-+-+-+-+-+-+-+
 ~~~~~~~~
@@ -140,7 +139,7 @@ The Path Maximum Transmission Unit (PMTU) in DTLS also limits the size of record
 
 # Limits on Key Usage
 
-The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to more than 2<sup>14</sup> + 256 bytes while keeping the same confidentiality and integrity advantage per write key therefore requires lower AEAD limits. When the "large_record_size" has been negotiated record size limit larger than 2<sup>14</sup> + 1 bytes, existing AEAD limits SHALL be decreased by a factor of (LargeRecordSizeLimit) / (2^14-256). For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only arounf 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
+The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to more than 2<sup>14</sup> + 256 bytes while keeping the same confidentiality and integrity advantage per write key therefore requires lower AEAD limits. When the "large_record_size" has been negotiated record size limit larger than 2<sup>14</sup> + 1 bytes, existing AEAD limits SHALL be decreased by a factor of (LargeRecordSizeLimit) / (2^14-256). For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only around 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
 
 # Security Considerations
 
@@ -167,6 +166,23 @@ IANA is requested to assign a new value in the TLS ExtensionType Values registry
 # Change Log
 {:removeInRFC="true" numbered="false"}
 
+Changes from -01 to -02:
+
+* Variable length field as defined in MLS
+
+Changes from -01 to -02:
+
+* Variable length field inspired by QUIC
+* Clarification that the extension value is equal to RFC8449
+
+Changes from -00 to -01:
+
+* Keep alive
+
+Changes from -05 to -00:
+
+* WG adoption
+
 Changes from -04 to -05:
 
 * Grammar and comprehension tweaks.
@@ -179,11 +195,11 @@ Changes from -03 to -04:
 Changes from -02 to -03:
 
 * Major rewrite based on discussions at IETF 119
-* New independant extension instead of flag extension used together with record_size_limit
+* New independent extension instead of flag extension used together with record_size_limit
 * New record format without opaque_type and legacy_record_version fields. This reduces overhead
 * Support inner plaintext size up to 2^32 - 256 bytes
 
 # Acknowledgments
 {:numbered="false"}
 
-The authors would like to thank {{{Stephen Farrell}}}, {{{Benjamin Kaduk}}}, {{{Benjamin Schwartz}}}, and {{{Martin Thomson}}} for their valuable comments and feedback. Some of the text were inspired by and borrowed from {{RFC8449}}.
+The authors would like to thank {{{Richard Barnes}}}, {{{Stephen Farrell}}}, {{{Benjamin Kaduk}}}, {{{Eric Rescorla}}}, {{{Benjamin Schwartz}}}, and {{{Martin Thomson}}} for their valuable comments and feedback. Some of the text were inspired by and borrowed from {{RFC8449}}.
