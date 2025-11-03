@@ -125,8 +125,8 @@ When the "large_record_size_limit" extension is negotiated:
    |  8 or 16 bit  |   E   - Epoch
    |Sequence Number|
    +-+-+-+-+-+-+-+-+
-   | 8, 16, 24, or |
-   | 32 bit Length |
+   | 8, 16, or 32  |
+   | bit Length    |
    | (if present)  |
    +-+-+-+-+-+-+-+-+
 ~~~~~~~~
