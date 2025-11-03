@@ -45,7 +45,7 @@ normative:
 
   RFC2119:
   RFC8174:
-  RFC8446:
+  RFC8446bis: I-D.ietf-tls-rfc8446bis
   RFC8447:
   RFC8449:
   RFC9147:
@@ -139,7 +139,7 @@ The Path Maximum Transmission Unit (PMTU) in DTLS also limits the size of record
 
 # Limits on Key Usage
 
-The maximum record size limit is an input to the AEAD limits calculations in TLS 1.3 {{RFC8446}} and DTLS 1.3 {{RFC9147}}. Increasing the maximum record size to more than 2<sup>14</sup> + 256 bytes while keeping the same confidentiality and integrity advantage per write key therefore requires lower AEAD limits. When the "large_record_size" has been negotiated record size limit larger than 2<sup>14</sup> + 1 bytes, existing AEAD limits SHALL be decreased by a factor of (LargeRecordSizeLimit) / (2^14-256). For example, when AES-CGM is used in TLS 1.3 {{RFC8446}} with a 64 kB record limit, only around 2<sup>22.5</sup> records (about 6 million) may be encrypted on a given connection.
+TLS 1.3 {{RFC8446bis}} and DTLS 1.3 {{RFC9147}} limits the number of full-size records that may be encrypted under a given set of keys. Increasing the maximum record size to more than 2<sup>14</sup> + 256 bytes while keeping the same confidentiality and integrity advantage per write key therefore requires lower AEAD limits. When the "large_record_size" has been negotiated record size limit larger than 2<sup>14</sup> + 1 bytes, existing AEAD limits SHALL be decreased by a factor of (LargeRecordSizeLimit) / (2^14-256). For example, when AES-CGM is used in TLS 1.3 {{RFC8446bis}} with a 64 kB record limit, only around 2<sup>22.5</sup> full-size records (about 6 million) may be encrypted under a given set of keys. For ChaCha20/Poly1305, the record sequence number would still wrap before the safety limit is reached.
 
 # Security Considerations
 
