@@ -198,4 +198,4 @@ Changes from -02 to -03:
 # Acknowledgments
 {:numbered="false"}
 
-The authors would like to thank {{{Richard Barnes}}}, {{{Stephen Farrell}}}, {{{Benjamin Kaduk}}}, {{{Eric Rescorla}}}, {{{Benjamin Schwartz}}}, and {{{Martin Thomson}}} for their valuable comments and feedback. Some of the text were inspired by and borrowed from {{RFC8449}}.
+The authors would like to thank {{{Richard Barnes}}}, {{{Stephen Farrell}}}, {{{Benjamin Kaduk}}}, {{{Colm MacCárthaigh}}}, {{{Eric Rescorla}}}, {{{Benjamin Schwartz}}}, and {{{Martin Thomson}}} for their valuable comments and feedback. Some of the text were inspired by and borrowed from {{RFC8449}}.
