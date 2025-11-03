@@ -104,7 +104,7 @@ When the "large_record_size_limit" extension is negotiated:
 ~~~~~~~~
 
 | Prefix | Length  | Usable Bits | Min   | Max        |
-| 00     | 1       | 6           | 0     | 63         |  
+| 00     | 1       | 6           | 0     | 63         |
 | 01     | 2       | 14          | 64    | 16383      |
 | 10     | 4       | 30          | 16384 | 1073741823 |
 | 11     | invalid | -           | -     | -          |
