@@ -169,10 +169,6 @@ IANA is requested to assign a new value in the TLS ExtensionType Values registry
 Changes from -01 to -02:
 
 * Variable length field as defined in MLS
-
-Changes from -01 to -02:
-
-* Variable length field inspired by QUIC
 * Clarification that the extension value is equal to RFC8449
 
 Changes from -00 to -01:
