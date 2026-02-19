@@ -5,10 +5,10 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 26 May 2026                                               H-BRS
+Expires: 23 August 2026                                            H-BRS
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
-                                                        22 November 2025
+                                                        19 February 2026
 
 
        Large Record Sizes for TLS and DTLS with Reduced Overhead
@@ -56,11 +56,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 May 2026.
+   This Internet-Draft will expire on 23 August 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -207,8 +207,8 @@ Table of Contents
                    Table 1: Summary of varuint Encodings.
 
    *  All DTLS 1.3 records protected with application_traffic_secret and
-      with length present MUST use a unified_hdr structure with a length
-      equal to the TLS 1.3 length field defined above.
+      with length present MUST use a unified_hdr structure with a
+      varuint length equal to the TLS 1.3 length field defined above.
 
        0 1 2 3 4 5 6 7
       +-+-+-+-+-+-+-+-+
@@ -223,7 +223,8 @@ Table of Contents
       |Sequence Number|
       +-+-+-+-+-+-+-+-+
       | 8, 16, or 32  |
-      | bit Length    |
+      | bit varuint   |
+      | Length        |
       | (if present)  |
       +-+-+-+-+-+-+-+-+
 
