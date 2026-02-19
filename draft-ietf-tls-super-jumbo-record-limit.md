@@ -110,7 +110,7 @@ When the "large_record_size_limit" extension is negotiated:
 | 11     | invalid | -           | -     | -          |
 {: #fig-sizes title="Summary of varuint Encodings."}
 
-* All DTLS 1.3 records protected with application_traffic_secret and with length present MUST use a unified_hdr structure with a length equal to the TLS 1.3 length field defined above.
+* All DTLS 1.3 records protected with application_traffic_secret and with length present MUST use a unified_hdr structure with a varuint length equal to the TLS 1.3 length field defined above.
 
 ~~~~~~~~
     0 1 2 3 4 5 6 7
@@ -126,7 +126,8 @@ When the "large_record_size_limit" extension is negotiated:
    |Sequence Number|
    +-+-+-+-+-+-+-+-+
    | 8, 16, or 32  |
-   | bit Length    |
+   | bit varuint   |
+   | Length        |
    | (if present)  |
    +-+-+-+-+-+-+-+-+
 ~~~~~~~~
