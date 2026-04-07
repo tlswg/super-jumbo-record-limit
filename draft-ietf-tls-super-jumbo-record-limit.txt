@@ -5,10 +5,10 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 23 August 2026                                            H-BRS
+Expires: 9 October 2026                                            H-BRS
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
-                                                        19 February 2026
+                                                            7 April 2026
 
 
        Large Record Sizes for TLS and DTLS with Reduced Overhead
@@ -17,11 +17,11 @@ Expires: 23 August 2026                                            H-BRS
 Abstract
 
    TLS 1.3 records limit the inner plaintext (TLSInnerPlaintext) size to
-   2^14 + 1 bytes, which includes one byte for the content type.
-   Records also have a 3-byte overhead due to the fixed opaque_type and
-   legacy_record_version fields.  This document defines a TLS extension
-   that allows endpoints to negotiate a larger maximum inner plaintext
-   size, up to 2^30 - 256 bytes, while reducing overhead.
+   2^14 + 1 bytes, which includes one byte for the content type.  DTLS
+   1.3 uses the same plaintext size limit.  This document defines a TLS
+   extension that allows endpoints to advertise larger per-direction
+   maximum inner plaintext sizes, up to 2^30 - 256 bytes, while reducing
+   overhead in TLS 1.3 and DTLS 1.3 record headers.
 
 About This Document
 
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 August 2026.
+   This Internet-Draft will expire on 9 October 2026.
 
 Copyright Notice
 
@@ -103,18 +103,21 @@ Table of Contents
    additional fragmentation in almost all use cases.  In [RFC6083] (DTLS
    over SCTP), the 2^14-byte limit is a severe restriction.
 
-   This document defines a "large_record_size_limit" extension that
-   allows endpoints to negotiate a larger maximum inner plaintext
-   (TLSInnerPlaintext) size.  This extension is valid in TLS 1.3 and
-   DTLS 1.3.  The extension works similarly to the "record_size_limit"
-   extension defined in [RFC8449].  Additionally, this document defines
-   new TLS 1.3 TLSLargeCiphertext and DTLS 1.3 unified_hdr structures to
-   enable inner plaintexts up to 2^30 - 256 bytes with reduced overhead.
-   For example, ciphertexts up to 64 bytes can be supported with 4 bytes
-   less overhead and ciphertexts up to 2^14 bytes can be supported with
-   3 bytes less overhead, which is useful in constrained IoT
-   environments.  The "large_record_size_limit" extension is
-   incompatible with middleboxes expecting TLS 1.2 records.
+   This document defines a "large_record_size_limit" extension.  The
+   extension is negotiated during the handshake, and each endpoint
+   independently advertises the maximum inner plaintext
+   (TLSInnerPlaintext) size it is willing to receive.  Therefore, the
+   two traffic directions can use different limits.  This extension is
+   valid in TLS 1.3 and DTLS 1.3.  The extension works similarly to the
+   "record_size_limit" extension defined in [RFC8449].  Additionally,
+   this document defines new TLS 1.3 TLSLargeCiphertext and DTLS 1.3
+   unified_hdr structures to enable inner plaintexts up to 2^30 - 256
+   bytes with reduced overhead.  For example, ciphertexts up to 64 bytes
+   can be supported with 4 bytes less overhead and ciphertexts up to
+   2^14 bytes can be supported with 3 bytes less overhead, which is
+   useful in constrained IoT environments.  The
+   "large_record_size_limit" extension is incompatible with middleboxes
+   expecting TLS 1.2 records.
 
 2.  Terminology
 
@@ -143,8 +146,8 @@ Table of Contents
    that are larger than the limit it advertises as its own limit.  A TLS
    endpoint that receives a record larger than its advertised limit MUST
    generate a fatal "record_overflow" alert; a DTLS endpoint that
-   receives a record larger than its advertised limit MAY either
-   generate a fatal "record_overflow" alert or discard the record.  An
+   receives a record larger than its advertised limit SHOULD discard the
+   record and SHOULD NOT generate a fatal "record_overflow" alert.  An
    endpoint MUST NOT add padding to records that would cause the length
    of TLSInnerPlaintext to exceed the limit advertised by the other
    endpoint.
@@ -159,16 +162,27 @@ Table of Contents
    renegotiated.  Records are subject to the limits that were set in the
    handshake that produces the keys that are used to protect those
    records.  This admits the possibility that the extension might not be
-   negotiated during resumption.
+   negotiated during resumption.  If the extension is not negotiated in
+   a subsequent handshake, records protected with keys from that
+   handshake are not subject to "large_record_size_limit" and are
+   instead subject to the record size limits and record formats defined
+   by TLS 1.3 [RFC8446bis] and DTLS 1.3 [RFC9147], unless another
+   negotiated extension specifies otherwise.
 
    Unprotected messages and records protected with early_traffic_secret
    or handshake_traffic_secret are not subject to the large record size
-   limit.
+   limit and remain subject to the record size limits and record formats
+   defined by TLS 1.3 [RFC8446bis] and DTLS 1.3 [RFC9147].  In
+   particular, these records MUST use TLSCiphertext (TLS) or the
+   DTLSCiphertext unified_hdr length encoding from [RFC9147] (DTLS),
+   rather than TLSLargeCiphertext or the varuint length encoding defined
+   in this document.
 
    When the "large_record_size_limit" extension is negotiated:
 
-   *  All TLS 1.3 records protected with application_traffic_secret MUST
-      use the TLSLargeCiphertext structure instead of the TLSCiphertext
+   *  All TLS 1.3 records protected with application traffic keys
+      (derived from application_traffic_secret_N) MUST use the
+      TLSLargeCiphertext structure instead of the TLSCiphertext
       structure.
 
       Instead of using a fixed-length field, this specification defines
@@ -180,12 +194,16 @@ Table of Contents
       bits of the first byte indicate the base 2 logarithm of the
       integer encoding length in bytes.  The remaining bits encode the
       integer value in network byte order.  The encoded representation
-      MUST use the smallest number of bits necessary to represent the
-      integer value.  When decoding, any value that uses more bits than
-      necessary MUST be treated as malformed.  This means that integers
-      are encoded in 1, 2, or 4 bytes and can encode 6-, 14-, or 30-bit
-      values, respectively.  Table 1 summarizes the encoding properties
-      from Section 2.1.2 of [RFC9420].
+      MUST use the smallest number of octets necessary to represent the
+      integer value to ensure a unique wire representation.  When
+      decoding, any value that uses more octets than necessary is an
+      invalid length encoding and MUST be treated as if the record
+      exceeded the peer's advertised record size limit.  This means that
+      integers are encoded in 1, 2, or 4 bytes and can encode 6-, 14-,
+      or 30-bit values, respectively.  The varuint type is defined only
+      for the record length fields specified in this document.  Table 1
+      summarizes the encoding properties from Section 2.1.2 of
+      [RFC9420].
 
       struct {
           varuint length;
@@ -206,9 +224,14 @@ Table of Contents
 
                    Table 1: Summary of varuint Encodings.
 
-   *  All DTLS 1.3 records protected with application_traffic_secret and
-      with length present MUST use a unified_hdr structure with a
-      varuint length equal to the TLS 1.3 length field defined above.
+   If the first two bits of the length field are 11, the encoded length
+   is invalid and MUST be treated as if the record exceeded the peer's
+   advertised record size limit.
+
+   *  All DTLS 1.3 records protected with application traffic keys
+      (derived from application_traffic_secret_N) and with length
+      present MUST use a unified_hdr structure with a varuint length
+      equal to the TLS 1.3 length field defined above.
 
        0 1 2 3 4 5 6 7
       +-+-+-+-+-+-+-+-+
@@ -228,16 +251,20 @@ Table of Contents
       | (if present)  |
       +-+-+-+-+-+-+-+-+
 
-   *  An endpoint MAY generate records protected with
-      application_traffic_secret with inner plaintext that is equal to
-      or smaller than the LargeRecordSizeLimit value it receives from
-      its peer.  An endpoint MUST NOT generate a protected record with
-      inner plaintext that is larger than the LargeRecordSizeLimit value
-      it receives from its peer.
+   *  An endpoint MAY generate records protected with application
+      traffic keys (derived from application_traffic_secret_N) with
+      inner plaintext length that is equal to or smaller than the
+      LargeRecordSizeLimit value it receives from its peer.  An endpoint
+      MUST NOT generate a protected record with inner plaintext length
+      that is larger than the LargeRecordSizeLimit value it receives
+      from its peer.
 
    The "large_record_size_limit" extension is not compatible with
    middleboxes expecting TLS 1.2 records and SHOULD NOT be negotiated
-   where such middleboxes are expected.  A server MUST NOT send
+   where such middleboxes are expected.  Endpoints that support this
+   specification SHOULD prefer "large_record_size_limit" over
+   "record_size_limit" and "max_fragment_length", and a client SHOULD
+   offer at most one of these extensions.  A server MUST NOT send
    extension responses to more than one of "large_record_size_limit",
    "record_size_limit", and "max_fragment_length".  A client MUST treat
    receipt of more than one of "large_record_size_limit",
@@ -254,18 +281,21 @@ Table of Contents
 
 4.  Limits on Key Usage
 
-   TLS 1.3 [RFC8446bis] and DTLS 1.3 [RFC9147] limits the number of
-   full-size records that may be encrypted under a given set of keys.
-   Increasing the maximum record size to more than 2^14 + 256 bytes
+   TLS 1.3 [RFC8446bis] and DTLS 1.3 [RFC9147] limit the number of full-
+   size records that may be encrypted under a given set of keys.
+   Increasing the maximum inner plaintext size to more than 2^14 bytes
    while keeping the same confidentiality and integrity advantage per
-   write key therefore requires lower AEAD limits.  When the
-   "large_record_size" has been negotiated record size limit larger than
-   2^14 + 1 bytes, existing AEAD limits SHALL be decreased by a factor
-   of (LargeRecordSizeLimit) / (2^14-256).  For example, when AES-GCM is
-   used in TLS 1.3 [RFC8446bis] with a 64 kB record limit, only around
-   2^22.5 full-size records (about 6 million) may be encrypted under a
-   given set of keys.  For ChaCha20/Poly1305, the record sequence number
-   would still wrap before the safety limit is reached.
+   write key therefore requires lower AEAD limits.  When
+   "large_record_size_limit" has been negotiated with a record size
+   limit larger than 2^14 + 1 bytes, existing AEAD limits SHALL be
+   decreased by a factor of (LargeRecordSizeLimit) / (2^14).  For AES-
+   GCM, usage against the confidentiality limit is block-based: each
+   protected record consumes ceil(record_plaintext_length / 16) * 16
+   bytes.  For example, when AES-GCM is used in TLS 1.3 [RFC8446bis]
+   with a 64 kB record limit, only around 2^22.5 full-size records
+   (about 6 million) may be encrypted under a given set of keys.  For
+   ChaCha20/Poly1305, the record sequence number would still wrap before
+   the safety limit is reached.
 
 5.  Security Considerations
 
@@ -351,6 +381,11 @@ Change Log
 
    This section is to be removed before publishing as an RFC.
 
+   Changes from -02 to -03:
+
+   *  Addressed WGLC comments from Magnus Westerlund, Ilari
+      Liusvaara,Valery Smyslov, Eric Rescorla and Martin Thomson.
+
    Changes from -01 to -02:
 
    *  Variable length field equal to the one defined in MLS
@@ -393,8 +428,12 @@ Acknowledgments
 
    The authors would like to thank Richard Barnes, Stephen Farrell,
    Benjamin Kaduk, Colm MacCárthaigh, Eric Rescorla, Benjamin Schwartz,
-   and Martin Thomson for their valuable comments and feedback.  Some of
-   the text were inspired by and borrowed from [RFC8449].
+   Ira McDonald, Magnus Westerlund, Ilari Liusvaara, Valery Smyslov and
+   Martin Thomson for their valuable comments and feedback.  Some of the
+   text were inspired by and borrowed from [RFC8449].
+
+   We would also like to thank our TLS working group chairs for their
+   support.
 
 Authors' Addresses
 
