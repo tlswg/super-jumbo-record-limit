@@ -5,7 +5,7 @@
 Transport Layer Security                               J. Preuß Mattsson
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                           H. Tschofenig
-Expires: 9 October 2026                                            H-BRS
+Expires: 9 October 2026                                         UniBw M.
                                                                 M. Tüxen
                                        Münster Univ. of Applied Sciences
                                                             7 April 2026
@@ -443,8 +443,10 @@ Authors' Addresses
 
 
    Hannes Tschofenig
-   University of Applied Sciences Bonn-Rhein-Sieg
-   Email: Hannes.Tschofenig@gmx.net
+   University of the Bundeswehr Munich
+   85577 Neubiberg
+   Germany
+   Email: hannes.tschofenig@gmx.net
 
 
    Michael Tüxen
