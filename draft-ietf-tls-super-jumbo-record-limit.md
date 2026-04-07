@@ -32,9 +32,13 @@ author:
 - initials: H.
   surname: Tschofenig
   name: Hannes Tschofenig
-  org: University of Applied Sciences Bonn-Rhein-Sieg
-  abbrev: H-BRS
-  email: Hannes.Tschofenig@gmx.net
+  org: University of the Bundeswehr Munich
+  abbrev: UniBw M.
+  city: Neubiberg
+  region: Bavaria
+  country: Germany
+  code: 85577
+  email: hannes.tschofenig@gmx.net
 - initials: M.
   surname: Tüxen
   name: Michael Tüxen
